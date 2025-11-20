@@ -1,0 +1,77 @@
+\begin{thebibliography}{10}
+
+\bibitem{nicholson2020}
+W.~K. Nicholson, {\em Linear Algebra with Applications}.
+\newblock Calgary, Alberta, Canada: Lyryx Learning Inc., 2021a~ed., Dec. 2020.
+
+\bibitem{boyd2007jordan}
+S.~Boyd, ``Jordan canonical form (lecture notes, ee263, autumn 2007–08).'' Lecture notes, Stanford University, 2007.
+
+\bibitem{dawkins2022diff}
+P.~Dawkins, ``Differential equations.'' Online notes, Lamar University, 2022.
+
+\bibitem{byu2005iem}
+V.~Sumantran, ``Me 505: Introduction to engineering mathematics -- lecture notes.'' \url{https://www.et.byu.edu/~vps/ME505/IEM/05%2005.pdf}, 2005.
+
+\bibitem{mit18_03sc}
+M.~I. of~Technology, ``18.03sc differential equations, fall 2011: Unit iv -- first order systems.'' MIT OpenCourseWare, 2011.
+
+\bibitem{teschl2012ode}
+G.~Teschl, {\em Ordinary Differential Equations and Dynamical Systems}, vol.~140 of {\em Graduate Studies in Mathematics}.
+\newblock American Mathematical Society, 2012.
+
+\bibitem{complex}
+{Centre for Innovation in Mathematics Teaching}, ``A level mathematics: Further pure, chapter 3.'' \url{https://www.cimt.org.uk/projects/mepres/alevel/fpure_ch3.pdf}, 2010.
+
+\bibitem{anton_calculus10}
+H.~Anton, I.~C. Bivens, and S.~Davis, ``Calculus, 10th edition,'' 2018.
+
+\bibitem{razdan2022pde}
+A.~K. Razdan and V.~Ravichandran, {\em Fundamentals of Partial Differential Equations}.
+\newblock Springer Singapore, 1st~ed., 2022.
+
+\bibitem{clp3multivariable2021}
+J.~Feldman, A.~Rechnitzer, and E.~Yeager, {\em CLP-3 Multivariable Calculus}.
+\newblock CLP Publishing, may 2021~ed., 2021.
+\newblock Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International.
+
+\bibitem{dawkins_calculusIII}
+P.~Dawkins, ``Calculus.'' Lamar University, 2023.
+
+\bibitem{straussPDE}
+W.~A. Strauss, {\em Partial Differential Equations: An Introduction}.
+\newblock John Wiley \& Sons, 2nd~ed., 2007.
+
+\bibitem{zillAEM}
+D.~G. Zill, {\em Advanced Engineering Mathematics}.
+\newblock Burlington, MA, USA: Jones \& Bartlett Learning, 6th~ed., 2017.
+
+\bibitem{solovjov2021systems}
+V.~Solovjov, ``V.5 systems of first order linear odes,'' in {\em Integrated Engineering Mathematics: A Comprehensive Review and Advanced Material for Graduate Students and Professionals}, Provo, Utah: Brigham Young University, 2021.
+\newblock Course Manual for ME EN 505 -- Applied Engineering Mathematics.
+
+\bibitem{stanford220a}
+S.~University, ``Math 220a: Introduction to partial differential equations.'' Online course page, 2025.
+
+\bibitem{evans2010pde}
+L.~C. Evans, {\em Partial Differential Equations}, vol.~19 of {\em Graduate Studies in Mathematics}.
+\newblock Providence, RI: American Mathematical Society, 2nd~ed., 2010.
+
+\bibitem{hanson2002operator}
+G.~W. Hanson and A.~B. Yakovlev, ``Introductory linear operator theory,'' in {\em Operator Theory for Electromagnetics: An Introduction}, pp.~1--54, New York: Springer, 2002.
+
+\bibitem{UQ_SciMS_ApproxPoly}
+{University of Queensland}, ``Approximation theory: Legendre, chebyshev and trigonometric polynomials.'' SciMS – Numerical Analysis (online teaching module), 2020.
+
+\bibitem{Wong2020OrthBases}
+J.~Wong, ``Approximation with orthogonal bases.'' Math 563 Lecture Notes, Duke University, 2020.
+\newblock Spring 2020, Lecture 4.
+
+\bibitem{CLRS2009}
+T.~H. Cormen, C.~E. Leiserson, R.~L. Rivest, and C.~Stein, {\em Introduction to Algorithms}.
+\newblock Cambridge, MA: MIT Press, 3rd~ed., 2009.
+
+\bibitem{CPAlgorithmsFFT}
+e-maxx team, ``Fast fourier transform --- algorithms for competitive programming.'' \url{https://cp-algorithms.com/algebra/fft.html}, 2025.
+
+\end{thebibliography}

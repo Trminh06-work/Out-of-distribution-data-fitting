@@ -1,0 +1,106 @@
+%=========================================================
+% Mathematics Report Template - HD Standard
+%=========================================================
+\documentclass[12pt,a4paper]{article}
+
+%---------------- Packages ----------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{multicol}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{angles,quotes} % for angle marks
+\usepackage{tabularx}
+\usetikzlibrary{arrows.meta, positioning}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% optional: make comments right-aligned with a pointer
+\algrenewcommand\algorithmiccomment[1]{\hfill$\triangleright$~#1}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools} % math environments
+\usepackage{mathrsfs}
+\usepackage{bm}             % bold math symbols
+\usepackage{physics}        % derivatives, bra-ket, etc.
+\usepackage{enumitem}       % custom lists
+\usepackage{tikz}           % diagrams
+\usepackage{pgfplots}       % plots
+\pgfplotsset{compat=1.18}
+\usepackage{graphicx}       % figures
+\usepackage{subcaption}     % subfigures
+\usepackage{xcolor}         % colors
+\usepackage{hyperref}       % hyperlinks
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=blue, urlcolor=blue}
+
+%---------------- Theorem Environments ----------------
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+%---------------- Title Page ----------------
+\title{\textbf{Mathematics Report  \\ Advanced Differential Equations}\\[6pt]
+       \large {SIT292 – Linear Algebra for Data Analysis}}
+\author{Student Name: Bao Minh Tran \\
+ Student ID: s224236373 \\
+  Deakin University}
+\date{September $12^{th}$, 2025}
+
+%=========================================================
+\begin{document}
+
+%=========================================================
+% Cover Page
+%=========================================================
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+
+    % University name
+    {\Large \textbf{Deakin University}}\\[0.5cm]
+    {\large Faculty of Science, Engineering and Built Environment}\\[0.5cm]
+    {\large School of IT}\\[2.5cm]
+
+    % Report title
+    % {\Large \textbf{Mathematics Report}}\\[0.5cm]
+    {\LARGE \textbf{A Survey on the Performance of State-of-the-Art Machine Learning Methods on Out-of-Distribution Data}}\\[3cm]
+
+    {\Large Supervisor: Prof. Gleb Beliakov and A/Prof. Simon James}\\[3cm]
+
+    % Author info
+    {\large Student Name: Bao Minh Tran}\\[0.5cm]
+    {\large Student ID: s224236373}\\[0.5cm]
+    {\large Email: s224236373@deakin.edu.au}\\[2cm]
+
+    % Supervisor or Lecturer
+
+    % Date
+    {\large November $12^{th}$, 2025}
+
+    \vfill
+\end{titlepage}
+
+\begin{abstract}
+    
+\end{abstract}
+
+\section{Introduction}
+
+\section{Experimental Setup}
+
+\newpage
+
+\newpage
+\bibliographystyle{ieeetr} % or another style like plain, apa, etc.
+\bibliography{literature}
+\nocite{*}
+
+\end{document}
