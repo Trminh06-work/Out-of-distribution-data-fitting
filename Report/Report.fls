@@ -1,8 +1,8 @@
-PWD /Users/admin/Deakin/Projects/Dean_Summer_Project_2025/Out-of-distribution-data-fitting
+PWD /Users/admin/Deakin/Projects/Dean_Summer_Project_2025/Out-of-distribution-data-fitting/Report
 INPUT /usr/local/texlive/2025/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/admin/Deakin/Projects/Dean_Summer_Project_2025/Out-of-distribution-data-fitting/Report.tex
+INPUT /Users/admin/Deakin/Projects/Dean_Summer_Project_2025/Out-of-distribution-data-fitting/Report/Report.tex
 OUTPUT Report.log
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
