@@ -1,77 +1,71 @@
 \begin{thebibliography}{10}
 
-\bibitem{nicholson2020}
-W.~K. Nicholson, {\em Linear Algebra with Applications}.
-\newblock Calgary, Alberta, Canada: Lyryx Learning Inc., 2021a~ed., Dec. 2020.
+\bibitem{8697857}
+P.~P. Shinde and S.~Shah, ``A review of machine learning and deep learning applications,'' in {\em 2018 Fourth International Conference on Computing Communication Control and Automation (ICCUBEA)}, pp.~1--6, 2018.
 
-\bibitem{boyd2007jordan}
-S.~Boyd, ``Jordan canonical form (lecture notes, ee263, autumn 2007–08).'' Lecture notes, Stanford University, 2007.
+\bibitem{Janiesch_2021}
+C.~Janiesch, P.~Zschech, and K.~Heinrich, ``Machine learning and deep learning,'' {\em Electronic Markets}, vol.~31, p.~685–695, Apr. 2021.
 
-\bibitem{dawkins2022diff}
-P.~Dawkins, ``Differential equations.'' Online notes, Lamar University, 2022.
+\bibitem{lecun2015deep}
+Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' {\em Nature}, vol.~521, no.~7553, pp.~436--444, 2015.
 
-\bibitem{byu2005iem}
-V.~Sumantran, ``Me 505: Introduction to engineering mathematics -- lecture notes.'' \url{https://www.et.byu.edu/~vps/ME505/IEM/05%2005.pdf}, 2005.
+\bibitem{rane2024applications}
+N.~Rane, S.~K. Mallick, O.~Kaya, and J.~Rane, ``Applications of deep learning in healthcare, finance, agriculture, retail, energy, manufacturing, and transportation: A review,'' in {\em Applied Machine Learning and Deep Learning: Architectures and Techniques}, ch.~7, pp.~132--152, Deep Science Publishing, October 2024.
 
-\bibitem{mit18_03sc}
-M.~I. of~Technology, ``18.03sc differential equations, fall 2011: Unit iv -- first order systems.'' MIT OpenCourseWare, 2011.
+\bibitem{jordan2015machine}
+M.~I. Jordan and T.~M. Mitchell, ``Machine learning: Trends, perspectives, and prospects,'' {\em Science}, vol.~349, no.~6245, pp.~255--260, 2015.
 
-\bibitem{teschl2012ode}
-G.~Teschl, {\em Ordinary Differential Equations and Dynamical Systems}, vol.~140 of {\em Graduate Studies in Mathematics}.
-\newblock American Mathematical Society, 2012.
+\bibitem{russell2021aima}
+S.~J. Russell and P.~Norvig, {\em Artificial Intelligence: A Modern Approach}.
+\newblock Hoboken, NJ: Pearson, 4~ed., 2021.
 
-\bibitem{complex}
-{Centre for Innovation in Mathematics Teaching}, ``A level mathematics: Further pure, chapter 3.'' \url{https://www.cimt.org.uk/projects/mepres/alevel/fpure_ch3.pdf}, 2010.
+\bibitem{malinin2021shifts}
+A.~Malinin, N.~Band, G.~Chesnokov, Y.~Gal, M.~Gales, A.~Noskov, A.~Ploskonosov, L.~Ostroumova~Prokhorenkova, I.~Provilkov, V.~Raina, V.~Raina, M.~Shmatova, P.~Tigas, and B.~Yangel, ``Shifts: A dataset of real distributional shift across multiple large-scale tasks,'' 07 2021.
 
-\bibitem{anton_calculus10}
-H.~Anton, I.~C. Bivens, and S.~Davis, ``Calculus, 10th edition,'' 2018.
+\bibitem{tamang2025handlingoutofdistributiondatasurvey}
+L.~Tamang, M.~R. Bouadjenek, R.~Dazeley, and S.~Aryal, ``Handling out-of-distribution data: A survey,'' 2025.
 
-\bibitem{razdan2022pde}
-A.~K. Razdan and V.~Ravichandran, {\em Fundamentals of Partial Differential Equations}.
-\newblock Springer Singapore, 1st~ed., 2022.
+\bibitem{quinonero2009datasetshift}
+J.~Qui{\~n}onero-Candela, M.~Sugiyama, A.~Schwaighofer, and N.~D. Lawrence, {\em Dataset Shift in Machine Learning}.
+\newblock Cambridge, MA: The MIT Press, 2009.
 
-\bibitem{clp3multivariable2021}
-J.~Feldman, A.~Rechnitzer, and E.~Yeager, {\em CLP-3 Multivariable Calculus}.
-\newblock CLP Publishing, may 2021~ed., 2021.
-\newblock Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International.
+\bibitem{koh2021wilds}
+P.~W. Koh, S.~Sagawa, H.~Marklund, S.~M. Xie, M.~Zhang, A.~Balsubramani, W.~Hu, M.~Yasunaga, R.~Lanas~Phillips, S.~Beery, J.~Leskovec, A.~Kundaje, E.~Pierson, S.~Levine, C.~Finn, and P.~Liang, ``Wilds: A benchmark of in-the-wild distribution shifts,'' {\em arXiv preprint arXiv:2012.07421}, 2020.
 
-\bibitem{dawkins_calculusIII}
-P.~Dawkins, ``Calculus.'' Lamar University, 2023.
+\bibitem{gulrajani2020searchlostdomaingeneralization}
+I.~Gulrajani and D.~Lopez-Paz, ``In search of lost domain generalization,'' 2020.
 
-\bibitem{straussPDE}
-W.~A. Strauss, {\em Partial Differential Equations: An Introduction}.
-\newblock John Wiley \& Sons, 2nd~ed., 2007.
+\bibitem{taori2020measuringrobustnessnaturaldistribution}
+R.~Taori, A.~Dave, V.~Shankar, N.~Carlini, B.~Recht, and L.~Schmidt, ``Measuring robustness to natural distribution shifts in image classification,'' 2020.
 
-\bibitem{zillAEM}
-D.~G. Zill, {\em Advanced Engineering Mathematics}.
-\newblock Burlington, MA, USA: Jones \& Bartlett Learning, 6th~ed., 2017.
+\bibitem{NEURIPS2019_97af07a1}
+A.~Barbu, D.~Mayo, J.~Alverio, W.~Luo, C.~Wang, D.~Gutfreund, J.~Tenenbaum, and B.~Katz, ``Objectnet: A large-scale bias-controlled dataset for pushing the limits of object recognition models,'' in {\em Advances in Neural Information Processing Systems} (H.~Wallach, H.~Larochelle, A.~Beygelzimer, F.~d\textquotesingle Alch\'{e}-Buc, E.~Fox, and R.~Garnett, eds.), vol.~32, Curran Associates, Inc., 2019.
 
-\bibitem{solovjov2021systems}
-V.~Solovjov, ``V.5 systems of first order linear odes,'' in {\em Integrated Engineering Mathematics: A Comprehensive Review and Advanced Material for Graduate Students and Professionals}, Provo, Utah: Brigham Young University, 2021.
-\newblock Course Manual for ME EN 505 -- Applied Engineering Mathematics.
+\bibitem{ribeiro-etal-2020-beyond}
+M.~T. Ribeiro, T.~Wu, C.~Guestrin, and S.~Singh, ``Beyond accuracy: Behavioral testing of {NLP} models with {C}heck{L}ist,'' in {\em Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics} (D.~Jurafsky, J.~Chai, N.~Schluter, and J.~Tetreault, eds.), (Online), pp.~4902--4912, Association for Computational Linguistics, July 2020.
 
-\bibitem{stanford220a}
-S.~University, ``Math 220a: Introduction to partial differential equations.'' Online course page, 2025.
+\bibitem{kolesnikov2023wildtabbenchmarkoutofdistributiongeneralization}
+S.~Kolesnikov, ``Wild-tab: A benchmark for out-of-distribution generalization in tabular regression,'' 2023.
 
-\bibitem{evans2010pde}
-L.~C. Evans, {\em Partial Differential Equations}, vol.~19 of {\em Graduate Studies in Mathematics}.
-\newblock Providence, RI: American Mathematical Society, 2nd~ed., 2010.
+\bibitem{Borisov_2024}
+V.~Borisov, T.~Leemann, K.~Seßler, J.~Haug, M.~Pawelczyk, and G.~Kasneci, ``Deep neural networks and tabular data: A survey,'' {\em IEEE Transactions on Neural Networks and Learning Systems}, vol.~35, p.~7499–7519, June 2024.
 
-\bibitem{hanson2002operator}
-G.~W. Hanson and A.~B. Yakovlev, ``Introductory linear operator theory,'' in {\em Operator Theory for Electromagnetics: An Introduction}, pp.~1--54, New York: Springer, 2002.
+\bibitem{heaton2018deep}
+J.~B. Heaton, N.~G. Polson, and J.~H. Witte, ``Deep learning in finance,'' {\em arXiv preprint arXiv:1602.06561}, 2018.
 
-\bibitem{UQ_SciMS_ApproxPoly}
-{University of Queensland}, ``Approximation theory: Legendre, chebyshev and trigonometric polynomials.'' SciMS – Numerical Analysis (online teaching module), 2020.
+\bibitem{ozbayoglu2020deeplearningfinancialapplications}
+A.~M. Ozbayoglu, M.~U. Gudelek, and O.~B. Sezer, ``Deep learning for financial applications : A survey,'' 2020.
 
-\bibitem{Wong2020OrthBases}
-J.~Wong, ``Approximation with orthogonal bases.'' Math 563 Lecture Notes, Duke University, 2020.
-\newblock Spring 2020, Lecture 4.
+\bibitem{NAYYAR202123}
+A.~Nayyar, L.~Gadhavi, and N.~Zaman, ``Chapter 2 - machine learning in healthcare: review, opportunities and challenges,'' in {\em Machine Learning and the Internet of Medical Things in Healthcare} (K.~K. Singh, M.~Elhoseny, A.~Singh, and A.~A. Elngar, eds.), pp.~23--45, Academic Press, 2021.
 
-\bibitem{CLRS2009}
-T.~H. Cormen, C.~E. Leiserson, R.~L. Rivest, and C.~Stein, {\em Introduction to Algorithms}.
-\newblock Cambridge, MA: MIT Press, 3rd~ed., 2009.
+\bibitem{Rajkomar2018ScalableAA}
+A.~Rajkomar, E.~Oren, K.~Chen, A.~M. Dai, N.~Hajaj, M.~Hardt, P.~J. Liu, X.~Liu, J.~Marcus, M.~Sun, P.~Sundberg, H.~Yee, K.~Zhang, Y.~Zhang, G.~Flores, G.~E. Duggan, J.~Irvine, Q.~V. Le, K.~Litsch, A.~Mossin, J.~Tansuwan, D.~Wang, J.~Wexler, J.~Wilson, D.~Ludwig, S.~L. Volchenboum, K.~Chou, M.~Pearson, S.~Madabushi, N.~H. Shah, A.~J. Butte, M.~D. Howell, C.~Cui, G.~S. Corrado, and J.~Dean, ``Scalable and accurate deep learning with electronic health records,'' {\em NPJ Digital Medicine}, vol.~1, 2018.
 
-\bibitem{CPAlgorithmsFFT}
-e-maxx team, ``Fast fourier transform --- algorithms for competitive programming.'' \url{https://cp-algorithms.com/algebra/fft.html}, 2025.
+\bibitem{leukel2021adoption}
+J.~Leukel, J.~González, and M.~Riekert, ``Adoption of machine learning technology for failure prediction in industrial maintenance: A systematic review,'' {\em Journal of Manufacturing Systems}, vol.~61, pp.~87--96, 2021.
+
+\bibitem{grinsztajn2022treebasedmodelsoutperformdeep}
+L.~Grinsztajn, E.~Oyallon, and G.~Varoquaux, ``Why do tree-based models still outperform deep learning on tabular data?,'' 2022.
 
 \end{thebibliography}

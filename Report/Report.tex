@@ -21,6 +21,7 @@
 % optional: make comments right-aligned with a pointer
 \algrenewcommand\algorithmiccomment[1]{\hfill$\triangleright$~#1}
 
+\usepackage{setspace}       % spacing environment
 \usepackage{amsmath, amssymb, amsthm, mathtools} % math environments
 \usepackage{mathrsfs}
 \usepackage{bm}             % bold math symbols
@@ -70,14 +71,15 @@
     {\large School of IT}\\[2.5cm]
 
     % Report title
-    % {\Large \textbf{Mathematics Report}}\\[0.5cm]
-    {\LARGE \textbf{A Survey on the Performance of State-of-the-Art Machine Learning Methods on Out-of-Distribution Data}}\\[3cm]
+    \begin{spacing}{1.5}
+    {\LARGE \textbf{Performance of State-of-the-Art Machine Learning Methods on Out-of-Distribution Data in Tabular Regression: A Survey}}\\[3cm]
+    \end{spacing}
+    \vspace{0cm}
 
     {\Large Supervisor: Prof. Gleb Beliakov and A/Prof. Simon James}\\[3cm]
 
     % Author info
-    {\large Student Name: Bao Minh Tran}\\[0.5cm]
-    {\large Student ID: s224236373}\\[0.5cm]
+    {\large Author's Name: Bao Minh Tran}\\[0.5cm]
     {\large Email: s224236373@deakin.edu.au}\\[2cm]
 
     % Supervisor or Lecturer
@@ -89,12 +91,68 @@
 \end{titlepage}
 
 \begin{abstract}
-    
+
 \end{abstract}
 
 \section{Introduction}
+Artificial Intelligence (AI) \cite{8697857} is a broad computer science field that studies about softwares that can mimic the human's capability of learning and problem solving.
+Machine Learning (ML) is a sub-field of AI, which \cite{Janiesch_2021} applies statistical methods to explore the underlying correlation among the features and the target.
+Nonetheless, ML faces difficulties when dealing with high data volume and dimensions. A sub-field of ML has been studied to overcome these challenges, i.e. Deep Learning \cite{lecun2015deep},
+which has proven its superiority over conventional ML approaches, and yielded prospective results in Natural Language Processing (NLP), Computer Vision (CV), Large Language Models (LLMs),
+and also being applied to other industries (\cite{rane2024applications}, \cite{jordan2015machine}), e.g. healthcare, finance, energy, and agriculture.
+\\
 
-\section{Experimental Setup}
+\noindent
+Since 1940s \cite{russell2021aima}, several ML/DL models have been proposed, and various benchmarks have been introduced to compare the performance among them. 
+A critical fault is that these benchmarks often (\cite{malinin2021shifts}, \cite{tamang2025handlingoutofdistributiondatasurvey}, \cite{quinonero2009datasetshift}, \cite{koh2021wilds}) overlook the distributional shifts between the training data and deployment data, alternatively, they assume that the traing and testing sets are independent and identically distributed (i.i.d).
+These inherent distributional shifts are due to various factors, e.g. \cite{tamang2025handlingoutofdistributiondatasurvey} sample biases, environment changing, data generation errors, and \cite{gulrajani2020searchlostdomaingeneralization} learning spurious correlations.
+Many studies have been contributed to showing \cite{gulrajani2020searchlostdomaingeneralization} distributional shifts in real data are roadblock to the ML/DL applications to other fields. In Computer Vision, \cite{taori2020measuringrobustnessnaturaldistribution} showed that recent image classifiers fail to OOD generalization
+and \cite{NEURIPS2019_97af07a1} introduced a benchmark for performance evaluation among object detectors, namely ObjectNet, which showed performance drop of top models, from 2012 to 2018, in comparision to other standard benchmarks, e.g. ImageNet.
+Regarding Natural Language Processing, \cite{ribeiro-etal-2020-beyond} proposed a benchmark, called CheckList, that leads to failure in semantic analysis due to tiny variations in the texts.
+\\
+
+\noindent
+Although (\cite{kolesnikov2023wildtabbenchmarkoutofdistributiongeneralization}, \cite{Borisov_2024}) tabular data is the primary structure to retain data for training models in numerous areas, e.g. finance (\cite{heaton2018deep}, \cite{ozbayoglu2020deeplearningfinancialapplications}),
+healthcare (\cite{NAYYAR202123}, \cite{Rajkomar2018ScalableAA}) and manufacturing sectors \cite{leukel2021adoption}, the number of standardized tabular regression benchmarks are very limited (\cite{grinsztajn2022treebasedmodelsoutperformdeep}, \cite{kolesnikov2023wildtabbenchmarkoutofdistributiongeneralization}).
+Therefore, this paper serves as a benchmark consisting of various train/test splitting strategies on real datasets to evaluate model's capability towards OOD generalization on tabular regression tasks.
+\section{Related works}
+
+\textbf{Comment (delete after finished)}: this is a benchmark report, only cite the papers contributing to benchmarks.
+\\
+
+\noindent
+
+
+\section{Problem Statement}
+
+\subsection{Problem Formulation}
+
+\subsection{Notation}
+
+\subsection{Definition 1. Distributional shifts}
+
+\subsection{Definition 2. Convex hull of dataset - extrapolation \& interpolation}
+
+\section{Benchmark}
+
+\subsection{Dataset}
+
+\subsection{Train/Test splitting strategy}
+
+\subsection{Models}
+
+\section{Experimental setup}
+
+
+\subsection{Evaluation metrics}
+
+\subsection{Hyperparameters selection methods}
+For each traing data, the model selection method is re-run to find the most optimal hyperparameter setting w.r.t the dataset.
+
+
+\section{Results}
+
+\section{Conclusion and Discussion}
 
 \newpage
 
