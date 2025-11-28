@@ -35,6 +35,13 @@ P.~W. Koh, S.~Sagawa, H.~Marklund, S.~M. Xie, M.~Zhang, A.~Balsubramani, W.~Hu, 
 \bibitem{gulrajani2020searchlostdomaingeneralization}
 I.~Gulrajani and D.~Lopez-Paz, ``In search of lost domain generalization,'' 2020.
 
+\bibitem{deeva2023evaluating}
+I.~Deeva, N.~Amerkhanova, and A.~Kropacheva, ``Evaluating robustness of tabular models under meta-features based shifts,'' {\em arXiv preprint}, 2023.
+\newblock AI Institute, ITMO University.
+
+\bibitem{malinin2022shifts20extendingdataset}
+A.~Malinin, A.~Athanasopoulos, M.~Barakovic, M.~B. Cuadra, M.~J.~F. Gales, C.~Granziera, M.~Graziani, N.~Kartashev, K.~Kyriakopoulos, P.-J. Lu, N.~Molchanova, A.~Nikitakis, V.~Raina, F.~L. Rosa, E.~Sivena, V.~Tsarsitalidis, E.~Tsompopoulou, and E.~Volf, ``Shifts 2.0: Extending the dataset of real distributional shifts,'' 2022.
+
 \bibitem{taori2020measuringrobustnessnaturaldistribution}
 R.~Taori, A.~Dave, V.~Shankar, N.~Carlini, B.~Recht, and L.~Schmidt, ``Measuring robustness to natural distribution shifts in image classification,'' 2020.
 
@@ -67,5 +74,17 @@ J.~Leukel, J.~González, and M.~Riekert, ``Adoption of machine learning technolo
 
 \bibitem{grinsztajn2022treebasedmodelsoutperformdeep}
 L.~Grinsztajn, E.~Oyallon, and G.~Varoquaux, ``Why do tree-based models still outperform deep learning on tabular data?,'' 2022.
+
+\bibitem{balestriero2021learninghighdimensionamounts}
+R.~Balestriero, J.~Pesenti, and Y.~LeCun, ``Learning in high dimension always amounts to extrapolation,'' 2021.
+
+\bibitem{DBLP:journals/corr/abs-2312-16243}
+S.~Zhang, Y.~Luo, Q.~Wang, H.~Chi, W.~Li, B.~Han, and J.~Li, ``Are all unseen data out-of-distribution?,'' {\em CoRR}, vol.~abs/2312.16243, 2023.
+
+\bibitem{hwang2024uncertaintymeasurementdeeplearning}
+H.~Hwang and J.~Shin, ``Uncertainty measurement of deep learning system based on the convex hull of training sets,'' 2024.
+
+\bibitem{Vanschoren_2014}
+J.~Vanschoren, J.~N. van Rijn, B.~Bischl, and L.~Torgo, ``Openml: networked science in machine learning,'' {\em ACM SIGKDD Explorations Newsletter}, vol.~15, p.~49–60, June 2014.
 
 \end{thebibliography}

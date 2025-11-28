@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.2)  27 NOV 2025 20:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.2)  28 NOV 2025 18:17
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -885,7 +885,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 105--113
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 120--122
+Underfull \hbox (badness 10000) in paragraph at lines 114--119
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 124--131
 
  []
 
@@ -895,18 +900,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 120--122
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.153 \section
-              {Results} [1]
+l.131 
+       [1]
 
-[2] (./Report.bbl
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 42.
+[2]
+
+[3] (./Report.bbl
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 49.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 
-[3{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}])
+[4]
 
-[4] (./Report.aux)
+[5{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}])
+
+[6] (./Report.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -915,18 +924,18 @@ Package rerunfilecheck Info: File `Report.out' has not changed.
 (rerunfilecheck)             Checksum: B643DD79E744EB2113CD6A819FFEB260;2513.
  ) 
 Here is how much of TeX's memory you used:
- 35636 strings out of 473190
- 810982 string characters out of 5715801
- 1290147 words of memory out of 5000000
- 58246 multiletter control sequences out of 15000+600000
+ 35650 strings out of 473190
+ 811412 string characters out of 5715801
+ 1290473 words of memory out of 5000000
+ 58252 multiletter control sequences out of 15000+600000
  618118 words of font info for 78 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  102i,5n,107p,821b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri12.pfb>
-Output written on Report.pdf (5 pages, 158776 bytes).
+Output written on Report.pdf (7 pages, 165373 bytes).
 PDF statistics:
- 195 PDF objects out of 1000 (max. 8388607)
- 172 compressed objects within 2 object streams
- 44 named destinations out of 1000 (max. 500000)
+ 230 PDF objects out of 1000 (max. 8388607)
+ 204 compressed objects within 3 object streams
+ 52 named destinations out of 1000 (max. 500000)
  141 words of extra memory for PDF output out of 10000 (max. 10000000)
 
