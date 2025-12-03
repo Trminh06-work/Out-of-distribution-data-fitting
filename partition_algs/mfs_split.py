@@ -3,6 +3,10 @@ This code is a copy of the paper:
     Title       : "Evaluating robustness of tabular models under meta-features based shifts",
     Paper Link  : https://openreview.net/pdf?id=BS68QcFppq
     GitHub repo : https://github.com/ITMO-NSS-team/OOD_Tab_Evaluation.git
+
+Modifications:
+    generation: 100 (initially 300)
+    take the 10 solutions, or all (if # solutions < 10) to construct Confidence Interval for performance report.
 '''
 import numpy as np
 import random
@@ -413,9 +417,11 @@ class EvolutionarySplitOptimizer:
         
         # Sort solutions by Euclidean distance (descending)
         sorted_solutions = sorted(pareto_front, key=lambda x: x.fitness.values[0], reverse=True)
+
+        # Maximum 10 solutions to construct Confidence Interval
+        max_solutions = max(len(sorted_solutions), 10)
         
-        
-        for i, solution in enumerate(sorted_solutions):
+        for i, solution in enumerate(sorted_solutions[:max_solutions]):
             # Get detailed information about solution
             details = self.get_split_details(solution)
             
@@ -682,5 +688,5 @@ def main(file_name, target_column_name, aim):
         file_prefix_name=f"split_by_{aim}", #output file name
         meta_features=[aim],
         population_size=50, 
-        generations=5,   
+        generations=100,   
     )

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.2)  28 NOV 2025 18:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.2)  28 NOV 2025 18:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -932,10 +932,10 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  102i,5n,107p,821b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri12.pfb>
-Output written on Report.pdf (7 pages, 165373 bytes).
+Output written on Report.pdf (7 pages, 165412 bytes).
 PDF statistics:
- 230 PDF objects out of 1000 (max. 8388607)
- 204 compressed objects within 3 object streams
+ 231 PDF objects out of 1000 (max. 8388607)
+ 205 compressed objects within 3 object streams
  52 named destinations out of 1000 (max. 500000)
  141 words of extra memory for PDF output out of 10000 (max. 10000000)
 
