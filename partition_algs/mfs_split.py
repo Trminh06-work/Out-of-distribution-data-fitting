@@ -687,6 +687,6 @@ def main(file_name, target_column_name, aim):
         target_column_name=target_column_name,
         file_prefix_name=f"split_by_{aim}", #output file name
         meta_features=[aim],
-        population_size=50, 
-        generations=100,   
+        population_size=5, # initial: 50
+        generations=1,   # initial: 100
     )
