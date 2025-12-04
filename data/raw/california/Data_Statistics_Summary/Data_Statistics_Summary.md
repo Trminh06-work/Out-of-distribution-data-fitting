@@ -13,19 +13,6 @@ statistics_man.df
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -183,264 +170,61 @@ statistics_man.df
 
 
 ```python
-statistics_man.print_samples()
-```
-
-    THE FIRST 5 SAMPLES
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Longitude</th>
-      <th>Latitude</th>
-      <th>HousingMedianAge</th>
-      <th>TotalRooms</th>
-      <th>TotalBedrooms</th>
-      <th>Population</th>
-      <th>Households</th>
-      <th>MedianIncome</th>
-      <th>MedianHouseValue</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>-117.03</td>
-      <td>32.78</td>
-      <td>17</td>
-      <td>5481</td>
-      <td>1618</td>
-      <td>2957</td>
-      <td>1537</td>
-      <td>2.5707</td>
-      <td>171300</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>-118.23</td>
-      <td>33.80</td>
-      <td>26</td>
-      <td>239</td>
-      <td>135</td>
-      <td>165</td>
-      <td>112</td>
-      <td>1.3333</td>
-      <td>187500</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>-122.46</td>
-      <td>37.71</td>
-      <td>39</td>
-      <td>2076</td>
-      <td>482</td>
-      <td>1738</td>
-      <td>445</td>
-      <td>3.1958</td>
-      <td>232100</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>-122.06</td>
-      <td>37.94</td>
-      <td>19</td>
-      <td>4005</td>
-      <td>972</td>
-      <td>1896</td>
-      <td>893</td>
-      <td>2.5268</td>
-      <td>235700</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>-122.87</td>
-      <td>38.68</td>
-      <td>32</td>
-      <td>4073</td>
-      <td>718</td>
-      <td>2053</td>
-      <td>629</td>
-      <td>3.7352</td>
-      <td>228000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-    THE LAST 5 SAMPLES
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Longitude</th>
-      <th>Latitude</th>
-      <th>HousingMedianAge</th>
-      <th>TotalRooms</th>
-      <th>TotalBedrooms</th>
-      <th>Population</th>
-      <th>Households</th>
-      <th>MedianIncome</th>
-      <th>MedianHouseValue</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>20635</th>
-      <td>-118.99</td>
-      <td>35.33</td>
-      <td>36</td>
-      <td>1590</td>
-      <td>367</td>
-      <td>1311</td>
-      <td>390</td>
-      <td>1.6786</td>
-      <td>52900</td>
-    </tr>
-    <tr>
-      <th>20636</th>
-      <td>-118.32</td>
-      <td>34.09</td>
-      <td>27</td>
-      <td>210</td>
-      <td>98</td>
-      <td>332</td>
-      <td>112</td>
-      <td>2.5556</td>
-      <td>175000</td>
-    </tr>
-    <tr>
-      <th>20637</th>
-      <td>-117.08</td>
-      <td>32.58</td>
-      <td>15</td>
-      <td>1462</td>
-      <td>274</td>
-      <td>1002</td>
-      <td>271</td>
-      <td>3.9698</td>
-      <td>142700</td>
-    </tr>
-    <tr>
-      <th>20638</th>
-      <td>-117.63</td>
-      <td>33.46</td>
-      <td>7</td>
-      <td>7684</td>
-      <td>1088</td>
-      <td>2812</td>
-      <td>1057</td>
-      <td>6.3401</td>
-      <td>387300</td>
-    </tr>
-    <tr>
-      <th>20639</th>
-      <td>-118.09</td>
-      <td>34.09</td>
-      <td>36</td>
-      <td>1068</td>
-      <td>246</td>
-      <td>949</td>
-      <td>250</td>
-      <td>2.3462</td>
-      <td>188500</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-```python
 for feature in statistics_man.df.columns:
     statistics_man.plot_distribution(feature)
 ```
 
 
     
-![png](output_3_0.png)
+![png](output_2_0.png)
     
 
 
 
     
-![png](output_3_1.png)
+![png](output_2_1.png)
     
 
 
 
     
-![png](output_3_2.png)
+![png](output_2_2.png)
     
 
 
 
     
-![png](output_3_3.png)
+![png](output_2_3.png)
     
 
 
 
     
-![png](output_3_4.png)
+![png](output_2_4.png)
     
 
 
 
     
-![png](output_3_5.png)
+![png](output_2_5.png)
     
 
 
 
     
-![png](output_3_6.png)
+![png](output_2_6.png)
     
 
 
 
     
-![png](output_3_7.png)
+![png](output_2_7.png)
     
 
 
 
     
-![png](output_3_8.png)
+![png](output_2_8.png)
     
 
 
@@ -451,7 +235,7 @@ statistics_man.plot_box()
 
 
     
-![png](output_4_0.png)
+![png](output_3_0.png)
     
 
 
@@ -467,19 +251,6 @@ statistics_man.print_stat_sum()
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -636,6 +407,6 @@ statistics_man.plot_corr_heatmap()
 
 
     
-![png](output_6_0.png)
+![png](output_5_0.png)
     
 

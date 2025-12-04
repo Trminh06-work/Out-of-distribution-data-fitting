@@ -147,13 +147,6 @@ class DatasetStatistics:
         plt.grid(True, linestyle = "--", alpha = 0.6)
         plt.show()
 
-    
-    def print_samples(self):
-        print("THE FIRST 5 SAMPLES")
-        display(self.df.head())
-        print("THE LAST 5 SAMPLES")
-        display(self.df.tail())
-
 
     def print_stat_sum(self):
         print(f"Number of samples : {self.df.shape[0]}")
