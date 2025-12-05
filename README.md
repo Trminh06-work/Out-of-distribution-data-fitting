@@ -29,8 +29,8 @@ This repository encompasses code and documents for:
 │   └── Data_Statistics_Summary.ipynb     # Notebook to perform basic EDA and data visualization on raw/*
 │
 ├── partition_algs/
-│   ├── mfs_split.py                      # Script for Meta-feature based partitioning technique
-│   ├── marginal_distribution_split.py    # Script for Distribution based partitioning techniques, i.e. Covariate/Prior shift and Concept shift
+│   ├── mfs_split.py                      # Script for Meta-feature based partitioning technique, representative of Concept Shifts
+│   ├── marginal_distribution_split.py    # Script for Distribution based partitioning techniques, i.e. Covariate shift and Prior shift
 │   ├── geometric_split.py                # Script for Geometric partioning techniques, i.e. Hyperballs and Slabs
 │   └── PartitionProcedure.ipynb          # Notebook to split the datasets using the above approaches
 │
