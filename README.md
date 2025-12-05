@@ -30,18 +30,24 @@ This repository encompasses code and documents for:
 
 ```text
 ├── Report/
-│      ├── project description/         # Relevant documents used and brief description about this project
-│      └── Report.pdf                   # The main documentation of this project
+│   ├── project description/              # Relevant documents used and brief description about this project
+│   └── Report.pdf                        # The main documentation of this project
 │
 ├── data/                     
-│   ├── raw/                            # Cleaned datasets
-│   └── splitted/                       # Partitioned datasets for evaluation
-│   └── stat_sum_func.py                # Script to perform basic EDA and data visualization
-│   └── Data_Statistics_Summary.ipynb   # Notebook to perform basic EDA and data visualization on raw/*
+│   ├── raw/                              # Cleaned datasets
+│   └── splitted/                         # Partitioned datasets for evaluation
+│   └── stat_sum_func.py                  # Script / utilities to perform basic EDA and data visualization
+│   └── Data_Statistics_Summary.ipynb     # Notebook to perform basic EDA and data visualization on raw/*
 │
-├── LICENSE                             # MIT LICENSE
-├── README.md                           # Project overview and instructions
-└── requirements.txt                    # Dependencies
+├── partition_algs/
+│   ├── mfs_split.py                      # Script for Meta-feature based partitioning technique
+│   ├── marginal_distribution_split.py    # Script for Distribution based partitioning techniques, i.e. Covariate/Prior shift and Concept shift
+│   ├── geometric_split.py                # Script for Geometric partioning techniques, i.e. Hyperballs and Slabs
+│   └── PartitionProcedure.ipynb          # Notebook to split the datasets using the above approaches
+│
+├── LICENSE                               # MIT LICENSE
+├── README.md                             # Project overview and instructions
+└── requirements.txt                      # Dependencies
 ```
 
 ---
