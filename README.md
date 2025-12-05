@@ -31,7 +31,7 @@ This repository encompasses code and documents for:
 ├── partition_algs/
 │   ├── mfs_split.py                      # Script for Meta-feature based partitioning technique, representative of Concept Shifts
 │   ├── marginal_distribution_split.py    # Script for Distribution based partitioning techniques, i.e. Covariate shift and Prior shift
-│   ├── geometric_split.py                # Script for Geometric partioning techniques, i.e. Hyperballs and Slabs
+│   ├── geometric_split.py                # Script for Geometry based partitioning techniques, i.e. Hyperballs and Slabs
 │   └── PartitionProcedure.ipynb          # Notebook to split the datasets using the above approaches
 │
 ├── LICENSE                               # MIT LICENSE
