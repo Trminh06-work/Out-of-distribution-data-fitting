@@ -1,5 +1,14 @@
 \begin{thebibliography}{10}
 
+\bibitem{kolesnikov2023wildtabbenchmarkoutofdistributiongeneralization}
+S.~Kolesnikov, ``Wild-tab: A benchmark for out-of-distribution generalization in tabular regression,'' 2023.
+
+\bibitem{grinsztajn2022treebasedmodelsoutperformdeep}
+L.~Grinsztajn, E.~Oyallon, and G.~Varoquaux, ``Why do tree-based models still outperform deep learning on tabular data?,'' 2022.
+
+\bibitem{Vanschoren_2014}
+J.~Vanschoren, J.~N. van Rijn, B.~Bischl, and L.~Torgo, ``Openml: networked science in machine learning,'' {\em ACM SIGKDD Explorations Newsletter}, vol.~15, p.~49–60, June 2014.
+
 \bibitem{8697857}
 P.~P. Shinde and S.~Shah, ``A review of machine learning and deep learning applications,'' in {\em 2018 Fourth International Conference on Computing Communication Control and Automation (ICCUBEA)}, pp.~1--6, 2018.
 
@@ -51,9 +60,6 @@ A.~Barbu, D.~Mayo, J.~Alverio, W.~Luo, C.~Wang, D.~Gutfreund, J.~Tenenbaum, and 
 \bibitem{ribeiro-etal-2020-beyond}
 M.~T. Ribeiro, T.~Wu, C.~Guestrin, and S.~Singh, ``Beyond accuracy: Behavioral testing of {NLP} models with {C}heck{L}ist,'' in {\em Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics} (D.~Jurafsky, J.~Chai, N.~Schluter, and J.~Tetreault, eds.), (Online), pp.~4902--4912, Association for Computational Linguistics, July 2020.
 
-\bibitem{kolesnikov2023wildtabbenchmarkoutofdistributiongeneralization}
-S.~Kolesnikov, ``Wild-tab: A benchmark for out-of-distribution generalization in tabular regression,'' 2023.
-
 \bibitem{Borisov_2024}
 V.~Borisov, T.~Leemann, K.~Seßler, J.~Haug, M.~Pawelczyk, and G.~Kasneci, ``Deep neural networks and tabular data: A survey,'' {\em IEEE Transactions on Neural Networks and Learning Systems}, vol.~35, p.~7499–7519, June 2024.
 
@@ -72,9 +78,6 @@ A.~Rajkomar, E.~Oren, K.~Chen, A.~M. Dai, N.~Hajaj, M.~Hardt, P.~J. Liu, X.~Liu,
 \bibitem{leukel2021adoption}
 J.~Leukel, J.~González, and M.~Riekert, ``Adoption of machine learning technology for failure prediction in industrial maintenance: A systematic review,'' {\em Journal of Manufacturing Systems}, vol.~61, pp.~87--96, 2021.
 
-\bibitem{grinsztajn2022treebasedmodelsoutperformdeep}
-L.~Grinsztajn, E.~Oyallon, and G.~Varoquaux, ``Why do tree-based models still outperform deep learning on tabular data?,'' 2022.
-
 \bibitem{balestriero2021learninghighdimensionamounts}
 R.~Balestriero, J.~Pesenti, and Y.~LeCun, ``Learning in high dimension always amounts to extrapolation,'' 2021.
 
@@ -84,7 +87,7 @@ S.~Zhang, Y.~Luo, Q.~Wang, H.~Chi, W.~Li, B.~Han, and J.~Li, ``Are all unseen da
 \bibitem{hwang2024uncertaintymeasurementdeeplearning}
 H.~Hwang and J.~Shin, ``Uncertainty measurement of deep learning system based on the convex hull of training sets,'' 2024.
 
-\bibitem{Vanschoren_2014}
-J.~Vanschoren, J.~N. van Rijn, B.~Bischl, and L.~Torgo, ``Openml: networked science in machine learning,'' {\em ACM SIGKDD Explorations Newsletter}, vol.~15, p.~49–60, June 2014.
+\bibitem{malinin_2022_7057666}
+A.~Malinin, A.~Athanasopoulos, M.~Barakovic, M.~Bach~Cuadra, M.~Gales, C.~Granziera, M.~Graziani, N.~Kartashev, K.~Kyriakopoulos, P.-J. Lu, N.~Molchanova, A.~Nikitakis, V.~Raina, F.~La~Rosa, E.~Sivena, V.~Tsarsitalidis, E.~Tsompopoulou, and E.~Volf, ``Shifts marine cargo vessel power consumption prediction dataset,'' Sept. 2022.
 
 \end{thebibliography}

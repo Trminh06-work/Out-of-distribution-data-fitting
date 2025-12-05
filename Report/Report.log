@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.2)  28 NOV 2025 18:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.2)  5 DEC 2025 10:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -874,25 +874,16 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 
 [1
 
-{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}]
-Underfull \hbox (badness 10000) in paragraph at lines 98--104
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 105--113
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 114--119
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 124--131
-
- []
+{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}] (./Report.toc
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <12> on input line 4.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 4.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 4.
+)
+\tf@toc=\write5
+\openout5 = `Report.toc'.
 
 
 
@@ -900,42 +891,61 @@ Underfull \hbox (badness 10000) in paragraph at lines 124--131
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.131 
-       [1]
+l.95 \newpage
+              [1]
+Underfull \hbox (badness 10000) in paragraph at lines 111--117
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 118--126
+
+ []
+
+
 
 [2]
-
-[3] (./Report.bbl
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 49.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 133.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
+Underfull \hbox (badness 10000) in paragraph at lines 141--148
 
-[4]
+ []
 
-[5{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}])
 
-[6] (./Report.aux)
+
+[3{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
+
+[4] (./Report.bbl
+
+[5]
+
+[6])
+
+[7]
+
+[8] (./Report.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `Report.out' has not changed.
-(rerunfilecheck)             Checksum: B643DD79E744EB2113CD6A819FFEB260;2513.
+(rerunfilecheck)             Checksum: E057EF0CD7FC9B0ADD7095F455827978;2574.
  ) 
 Here is how much of TeX's memory you used:
- 35650 strings out of 473190
- 811412 string characters out of 5715801
- 1290473 words of memory out of 5000000
- 58252 multiletter control sequences out of 15000+600000
- 618118 words of font info for 78 fonts, out of 8000000 for 9000
+ 35711 strings out of 473190
+ 812176 string characters out of 5715801
+ 1290516 words of memory out of 5000000
+ 58294 multiletter control sequences out of 15000+600000
+ 641450 words of font info for 105 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,5n,107p,821b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri12.pfb>
-Output written on Report.pdf (7 pages, 165412 bytes).
+ 102i,6n,107p,821b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri12.pfb>
+Output written on Report.pdf (9 pages, 203287 bytes).
 PDF statistics:
- 231 PDF objects out of 1000 (max. 8388607)
- 205 compressed objects within 3 object streams
- 52 named destinations out of 1000 (max. 500000)
- 141 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 282 PDF objects out of 1000 (max. 8388607)
+ 252 compressed objects within 3 object streams
+ 59 named destinations out of 1000 (max. 500000)
+ 165 words of extra memory for PDF output out of 10000 (max. 10000000)
 
