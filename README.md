@@ -24,8 +24,8 @@ This repository encompasses code and documents for:
 │
 ├── data/                     
 │   ├── raw/                              # Cleaned datasets
-│   └── splitted/                         # Partitioned datasets for evaluation
-│   └── stat_sum_func.py                  # Script / utilities to perform basic EDA and data visualization
+│   ├── splitted/                         # Partitioned datasets for evaluation
+│   ├── stat_sum_func.py                  # Script / utilities to perform basic EDA and data visualization
 │   └── Data_Statistics_Summary.ipynb     # Notebook to perform basic EDA and data visualization on raw/*
 │
 ├── partition_algs/
