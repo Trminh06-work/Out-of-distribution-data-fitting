@@ -17,17 +17,6 @@ This repository encompasses code and documents for:
 
 ## 📁 Repository Structure
 
-- `data/`  
-  - Preprocessed datasets and splitted datasets for evaluation
-- `partition_algs/`  
-  - Scripts / utilities for creating in-distribution vs OOD partitions
-- `ML_techniques_list.xlsx`  
-  - Notes or taxonomy of ML techniques, related papers, and dataset sources used / considered
-- `*.ipynb`  
-  - Jupyter notebooks for experiments, EDA, and visualisation
-- `README.md`  
-  - Project description and usage (this file)
-
 ```text
 ├── Report/
 │   ├── project description/              # Relevant documents used and brief description about this project
