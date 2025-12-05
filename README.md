@@ -117,7 +117,9 @@ Refer to **Report.pdf** for further information about References and the outcome
 ## ✉️ Contact
 
 Author: `Bao Minh Tran`  
+
 GitHub: [@Trminh06-work](https://github.com/Trminh06-work)
+
 LinkedIn: [Bao Minh Tran](www.linkedin.com/in/bao-minh-tran-587272372)
 
 Feel free to open an issue if you have questions, suggestions, or find a bug.
