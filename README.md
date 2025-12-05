@@ -28,6 +28,22 @@ This repository encompasses code and documents for:
 - `README.md`  
   - Project description and usage (this file)
 
+```text
+├── Report/
+│      ├── project description/         # Relevant documents used and brief description about this project
+│      └── Report.pdf                   # The main documentation of this project
+│
+├── data/                     
+│   ├── raw/                            # Cleaned datasets
+│   └── splitted/                       # Partitioned datasets for evaluation
+│   └── stat_sum_func.py                # Script to perform basic EDA and data visualization
+│   └── Data_Statistics_Summary.ipynb   # Notebook to perform basic EDA and data visualization on raw/*
+│
+├── LICENSE                             # MIT LICENSE
+├── README.md                           # Project overview and instructions
+└── requirements.txt                    # Dependencies
+```
+
 ---
 
 ## ▶️ Getting Started
