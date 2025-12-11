@@ -20,15 +20,13 @@ class MarginalDistributionSplit:
 
     def _distribution_based_selection(self, feat):
         """
-        This function returns a permutatation of which rows are selected
-        
-        Arguments:
-        X         :    the feature matrix
-        test_size :    the proportion of train/test split
-        feat      :    the feature column being considered
-        
-        Return:
-        col_mask  :    a permuation of selected samples' indices
+            This function returns a permutatation of which rows are selected
+            
+            Parameters
+                feat      :    the feature column being considered
+            
+            Return:
+                col_mask  :    a permuation of selected samples' indices
         """
         
         lo = 0
@@ -53,16 +51,14 @@ class MarginalDistributionSplit:
 
     def covariate_prior_shift(self):
         """
-        This function returns a list of permuation of selected samples w.r.t each feature.
-        
-        Arguments:
-        X         :    the feature matrix
-        test_size :    the proportion of train/test split
-        
-        Return:
-        perm      :    a permuation of selected samples' indices
+            Repeatedly loop through all features and the target, based on predefined TEST_SIZE/TRAIN_SIZE and their distributions to split the dataset.
         """
-    
+
+        # Create directory if not exist
+        output_dir = f"../data/splitted/{self.file_name}/Covariate_Prior_Shift"
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        
         for idx, feat in enumerate(self.df.columns):
             mask = self._distribution_based_selection(feat)
             X_train = self.X[mask]
@@ -74,9 +70,10 @@ class MarginalDistributionSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
     
             # Save files using the idx
-            path = f"../data/splitted/{self.file_name}/Covariate_Prior_Shift/train_{idx}.parquet"
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
             df_train.to_parquet(path, index = False)
-            path = f"../data/splitted/{self.file_name}/Covariate_Prior_Shift/test_{idx}.parquet"
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
             df_test.to_parquet(path, index = False)
+            
         
 
