@@ -30,6 +30,7 @@ This repository encompasses code and documents for:
 │
 ├── partition_algs/
 │   ├── mfs_split.py                      # Script for Meta-feature based partitioning technique, representative of Concept Shifts
+│   ├── modified_mfs_split.py             # A modified version of mfs_split.py to suit the need of this project
 │   ├── marginal_distribution_split.py    # Script for Distribution based partitioning techniques, i.e. Covariate shift and Prior shift
 │   ├── geometric_split.py                # Script for Geometry based partitioning techniques, i.e. Hyperballs and Slabs
 │   └── PartitionProcedure.ipynb          # Notebook to split the datasets using the above approaches
@@ -85,6 +86,8 @@ On Windows:
     stats.plot_distribution("Longitude")
 
 ### Run partition algorithms
+
+Due to GitHub resources constraints, the splitted data are not pushed to this repo. Hence, practitioners must re-run the `PartitionProcedure.ipynb` to obtain the splitted data. However, the statistics summary of the splitted data is provided to compare.
 
 **NOTES (delete later)** Explain how to use the code in `partition_algs/`. For example:
 
