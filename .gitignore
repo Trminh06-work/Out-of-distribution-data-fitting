@@ -1,0 +1,13 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+
+# Optional: ignore large data folders (only if you do NOT want to push them)
+data/raw/
+# data/splitted/
