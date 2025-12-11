@@ -8,6 +8,11 @@ __pycache__/
 # OS files
 .DS_Store
 
-# Optional: ignore large data folders (only if you do NOT want to push them)
+# Ignore all raw data
 data/raw/
-# data/splitted/
+
+# Ignore all nested directories under data/splitted
+data/splitted/*/**
+
+# Keep Data_stat_summ folders inside every dataset
+!data/splitted/*/Data_Statistics_Summary/
