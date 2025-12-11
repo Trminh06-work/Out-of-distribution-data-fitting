@@ -95,15 +95,10 @@
 \newpage
 
 \begin{abstract}
-The \textbf{Wild-Tab} benchmark \cite{kolesnikov2023wildtabbenchmarkoutofdistributiongeneralization}
-evaluates models' robustness under covariate, subpopulation, and hybrid shifts of large-sized real-world datasets.
-This paper also conducted an empirical study by implementing baseline DL models, e.g. MLP-PLR, FT-Transformer, and 10 other OOD generalization techniques, e.g. IRM, ERM, and GroupDRO, that are specifically designed for tabular regression tasks, and gave certain insightful analysis,
-i.e. ERM outperforms other models, and the impact of model architecture and hyperparameter tuning methods on models' performance.
-In contrast, \cite{grinsztajn2022treebasedmodelsoutperformdeep} offers a benchmark to compare between the tree-based models and DL models on OOD data in tabular regression tasks.
-More specifically, \cite{grinsztajn2022treebasedmodelsoutperformdeep} leverages 45 tabular datasets, mostly from OpenML \cite{Vanschoren_2014}, and cleans and prepares properly.
-Later, they benchmarked 3 tree-based models, i.e. Random Forest, XGBoost, and Gradient Boosting Trees (or HistGradient Boosting Trees in case of categorical inputs) and 4 distinct DL models, i.e. classical MLP, ResNet, FT-Transformer, and SAINT.
-Also, they clearly interpreted why tree-based models outperform DL models in tabular regression on OOD data regardless of models' complexity.
-Despite limited available benchamrks for tabular regression on OOD data, these prior works inspired us to conduct a more comprehensive empirical study to compare the performance of various ML/DL models on OOD data that are created by applying diverse splitting strategies to real-world datasets.
+
+\[
+P^{train} \neq P^{test}
+\]
 
 \end{abstract}
 
@@ -159,7 +154,7 @@ Despite limited available benchamrks for tabular regression on OOD data, these p
 
 \section{Problem settings}
 
-\subsection{Notation}
+Before going into the Definitions, let first recall the definition of regression.
 
 \subsection{Definition 1. Distributional shifts}
 
@@ -200,6 +195,43 @@ For each traing data, the model selection method is re-run to find the most opti
 \newpage
 \section*{Appendices}
 \addcontentsline{toc}{section}{Appendices}
+
+\section{Notation and Abbreviation Reference List}
+
+{\renewcommand{\arraystretch}{1.3}
+\section*{Abbreviation}
+\begin{tabularx}{\textwidth}{lX}
+\hline
+\textbf{Acronyms} & \textbf{Meaning} \\
+\hline
+OOD & Out-of-Distribution \\
+MSE & Mean Squared Error \\
+MAE & Mean Absolute Error \\
+RMSE & Root Mean Squared Error \\
+$\mathbf R^2$ & Coefficient of Determination \\
+
+\hline
+\end{tabularx}}
+
+{\renewcommand{\arraystretch}{1.7}
+\section*{Notation}
+
+\begin{tabularx}{\textwidth}{lX}
+\hline
+\textbf{Symbol} & \textbf{Meaning} \\
+\hline
+$\mathbf X^{n \times m}$ & Matrix of Covariates/Features of $m$ features and $n$ samples\\
+$\mathbf y^{n \times 1}$ & Target vector of $n$ outputs\\
+$\mathbb E$ & Expected Value \\
+$\mathbf P^{\text{tr}}(\cdot), \ \mathbf P^{\text{te}}(\cdot)$ & Distribution of train and test data \\
+$\mathbf P(\mathbf X), \ \mathbf P(\mathbf y)$ & Marginal Distribution \\
+$\mathbf P(\mathbf y \mid \mathbf X)$ & Conditional Distribution \\
+$(\mathbf x_i, y_i) \sim \mathbf P(\cdot)$ & A data point sampled from a distribution $\mathbf P(\cdot)$ \\
+$f(\mathbf x_i) \mapsto y_i$ & True mapping from $\mathbf x_i \in \mathbf X$ onto $y_i \in \mathbf y$ \\
+$\hat y_i = \hat f(\cdot) \approx y_i$ & An approximation mapping/function \\
+$\ell (f(\mathbf x_i), y_i) \mapsto \mathbb R_{\ge 0}$ & loss of a single pair input/true output $(\mathbf x_i, y_i)$ \\
+\hline
+\end{tabularx}}
 
 \section{Datasets}
 

@@ -6,6 +6,7 @@ from sklearn.cluster import KMeans
 class MarginalDistributionSplit:
     def __init__(self, file_name, df, test_size):
         self.file_name = file_name
+        self.df = df
         self.X = df.iloc[:, :-1]
         self.y = df.iloc[:, -1]
         self.test_size = test_size
@@ -37,12 +38,12 @@ class MarginalDistributionSplit:
         while lo < hi:
             mid = lo + (hi - lo) / 2
             
-            digitized_col = np.digitize(self.X.loc[:, feat], np.quantile(self.X.loc[:, feat], [mid, 1 - mid]))
+            digitized_col = np.digitize(self.df.loc[:, feat], np.quantile(self.df.loc[:, feat], [mid, 1 - mid]))
             
             # col_mask keeps the bits 1 on the row that a specific column is numbered 1, otherwise 0.
             col_mask = (digitized_col == 1)
             
-            if col_mask.sum() / self.X.shape[0] < self.test_size:
+            if col_mask.sum() / self.df.shape[0] < self.test_size:
                 lo = mid + epsilon
             else:
                 hi = mid - epsilon
@@ -62,8 +63,8 @@ class MarginalDistributionSplit:
         perm      :    a permuation of selected samples' indices
         """
     
-        for idx, feat in range(self.X.shape[1] + 1): # + 1 for the target column
-            mask = distribution_based_selection(feat)
+        for idx, feat in enumerate(self.df.columns):
+            mask = self._distribution_based_selection(feat)
             X_train = self.X[mask]
             y_train = self.y[mask]
             X_test = self.X[~mask]
@@ -73,9 +74,9 @@ class MarginalDistributionSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
     
             # Save files using the idx
-            path = f"../data/splitted/{self.file_name}/Covariate_Prior_Shift/train_{idx}.csv"
-            df_train.to_csv(path, index = False)
-            path = f"../data/splitted/{self.file_name}/Covariate_Prior_Shift/test_{idx}.csv"
-            df_test.to_csv(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Covariate_Prior_Shift/train_{idx}.parquet"
+            df_train.to_parquet(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Covariate_Prior_Shift/test_{idx}.parquet"
+            df_test.to_parquet(path, index = False)
         
 

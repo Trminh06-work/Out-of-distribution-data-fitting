@@ -7,6 +7,8 @@ This code is a copy of the paper:
 Modifications:
     generation: 100 (initially 300)
     take the 10 solutions, or all (if # solutions < 10) to construct Confidence Interval for performance report.
+    test_size: 0.3 (initially 0.2)
+    main() accepts pd.DataFrame instead of re-read data
 '''
 import numpy as np
 import random
@@ -270,7 +272,6 @@ class EvolutionarySplitOptimizer:
 
     def optimize(self, verbose=True):
         """Run optimization"""
-        print("HELLO WORLD")
         
         # Create initial population
         population = self.toolbox.population(n=self.population_size)
@@ -656,7 +657,7 @@ def run_split(file, target_column_name, file_prefix_name, meta_features=None, po
     optimizer = EvolutionarySplitOptimizer(
         X=X, 
         y=y, 
-        test_size=0.2,
+        test_size=0.3,
         population_size=population_size, 
         generations=generations,   
         random_state=42,    
@@ -677,13 +678,11 @@ def run_split(file, target_column_name, file_prefix_name, meta_features=None, po
             prefix=f"{file_prefix_name}_solution"
         )
     
-
-    
     return results
 
-def main(file_name, target_column_name, aim):
+def main(file_name, file, target_column_name, aim):
     run_split(
-        file=pd.read_csv(file_name), 
+        file=file, 
         target_column_name=target_column_name,
         file_prefix_name=f"split_by_{aim}", #output file name
         meta_features=[aim],

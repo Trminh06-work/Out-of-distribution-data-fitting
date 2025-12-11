@@ -22,33 +22,34 @@ class GeometricSplit:
             _data_within_slab(self, normal_vec, b, delta)
             _data_one_side(self, normal_vec, b)
             _compute_proportion(self, X_test)
-            _modified_FPS(self, SEED)
+            _find_bounds(self, SEED)
     """
     
     def _largest_distance(self, center):
       return np.max(np.linalg.norm(self.X - center, axis=1))
 
     
-    def _data_within_ball(center, radius):
-      # np.linalg.norm -> L2-norm
+    def _data_within_ball(self, center, radius):
+      
       return self.X[np.linalg.norm(self.X - center, axis=1) <= radius]
 
     
-    def _ball_selection(self, center):
-        # binary search
+    def _ball_selection(self, center, size):
+
         # CAUTION: the highest possible radius must be the distance from the center to the 
         #          farthest point in the feature space, not the dataset's diameter
         lo = 0
         epsilon = 0.01
-        high = self._largest_distance(self.X, center)
+        high = self._largest_distance(center)
+
         while lo < high:
             mid = lo + (high - lo) / 2
             
-            inclusive_data = self._data_within_ball(self.X, center, mid)
-            if len(inclusive_data) / total < self.train_size:
-              lo = mid + 1
+            inclusive_data = self._data_within_ball(center, mid)
+            if len(inclusive_data) / self.X.shape[0] < size:
+              lo = mid + epsilon
             else:
-              high = mid - 1
+              high = mid - epsilon
         
         return inclusive_data
 
@@ -109,7 +110,7 @@ class GeometricSplit:
         return len(X_test) / len(self.X)
         
 
-    def _modified_FPS(self, SEED):
+    def _find_bounds(self, SEED):
         """
         This function returns two boundaries w.r.t the given normal vector.
         
@@ -119,25 +120,33 @@ class GeometricSplit:
         np.random.seed(SEED)
         
         normal_vec, b, point = self._construct_hyperplane(SEED)
-        
-        lo_found = False
-        hi_found = False
-        
-        while not lo_found or not hi_found:
-            b = np.dot(normal_vec, point)
-            X_test = self._data_one_side(normal_vec, b)
+
+        dist = np.abs(self.X @ normal_vec - b) / np.linalg.norm(normal_vec)
+        mask = (self.X @ normal_vec - b) < 0
+
+        lo_points = np.where(mask)[0]      # indices where mask == True
+        hi_points = np.where(~mask)[0]     # indices where mask == False
+
+        # hi_points are guaranteed to exist, but not lo_points. 
+        # Thus, we, alternatively, use the points that closest and farthest
+        try:
+            # indices of the farthest point
+            lo = lo_points[np.argmax(dist[mask])] 
+            hi = hi_points[np.argmax(dist[~mask])]
+    
+            # the farthest points
+            lo, hi = self.X.iloc[lo], self.X.iloc[hi]
+        except:
+            lo = self.X[np.argmin(dist)]
+            hi = self.X[np.argmax(dist)]
+
+        # Find the upper and lower bound
+        b = np.dot(normal_vec, hi)
+        X_test = self._data_one_side(normal_vec, b)
+
+        if self._compute_proportion(X_test) < self.test_size:
+            lo, hi = hi, lo
             
-            if compute_proportion(X_test, self.X) < test_size:
-              lo = point
-              lo_found = True
-            else:
-              hi = point
-              hi_found = True
-            
-            dist = np.linalg.norm(self.X - point, axis = 1)
-            farthes_idx = np.argmax(dist)
-            point = self.X.iloc[farthes_idx] # Next point
-        
         return normal_vec, lo, hi
 
         
@@ -150,7 +159,7 @@ class GeometricSplit:
             np.random.seed(SEED)
             
             center = self.X.iloc[np.random.randint(0, len(self.X))]
-            inclusive_data = self._ball_selection(self.X, self.X.shape[0], 0.6, center)
+            inclusive_data = self._ball_selection(center, self.train_size)
             
             index_list = inclusive_data.index.to_list()
             X_train = self.X.iloc[index_list]
@@ -162,10 +171,10 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
 
             # Save files using the idx
-            path = f"../data/splitted/{self.file_name}/Single_Hyperball/train_{idx}.csv"
-            df_train.to_csv(path, index = False)
-            path = f"../data/splitted/{self.file_name}/Single_Hyperball/test_{idx}.csv"
-            df_test.to_csv(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Single_Hyperball/train_{idx}.parquet"
+            df_train.to_parquet(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Single_Hyperball/test_{idx}.parquet"
+            df_test.to_parquet(path, index = False)
 
 
     def multiple_hyperballs(self, num_balls):
@@ -181,7 +190,7 @@ class GeometricSplit:
 
         for idx, SEED in enumerate(self.SEEDS):
             # Avoid accidental modification to the original dataset
-            X = self.X.copy(deep = True) 
+            X = self.X.copy(deep = True)
             y = self.y.copy(deep = True)
             
             total = X.shape[0]
@@ -193,8 +202,10 @@ class GeometricSplit:
             
             for sub_test_size in sub_test_sizes:
                 np.random.seed(SEED)
-                center = X.iloc[np.random.randint(0, len(X))]
-                sub_inclusive_data = self._ball_selection(center)
+
+                center = X.sample(n = 1, random_state = SEED).to_numpy().squeeze()
+
+                sub_inclusive_data = self._ball_selection(center, sub_test_size)
                 sub_inclusive_data = sub_inclusive_data.index.to_list()
                 sub_inclusive_data = set(sub_inclusive_data)
                 
@@ -214,10 +225,10 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
 
             # Save files using the idx
-            path = f"../data/splitted/{self.file_name}/Multiple_Hyperballs/train_{idx}.csv"
-            df_train.to_csv(path, index = False)
-            path = f"../data/splitted/{self.file_name}/Multiple_Hyperballs/test_{idx}.csv"
-            df_test.to_csv(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Multiple_Hyperballs/train_{idx}.parquet"
+            df_train.to_parquet(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Multiple_Hyperballs/test_{idx}.parquet"
+            df_test.to_parquet(path, index = False)
 
 
     def single_slab(self):
@@ -238,15 +249,16 @@ class GeometricSplit:
             
             # binary search
             lo = 0
+            epsilon = 0.01
             high = np.max(np.linalg.norm(self.X - point, axis = 1))
             
             while lo < high:
                 delta = lo + (high - lo) / 2
                 inclusive_data = self._data_within_slab(normal_vec, b, delta)
                 if len(inclusive_data) / self.X.shape[0] < self.train_size:
-                  lo = delta
+                  lo = delta + epsilon
                 else:
-                  high = delta - 1
+                  high = delta - epsilon
             
             X_train = self._data_within_slab(normal_vec, b, delta)
             y_train = self.y.iloc[X_train.index]
@@ -258,10 +270,10 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
     
             # Save files using the idx
-            path = f"../data/splitted/{self.file_name}/Single_Slab/train_{idx}.csv"
-            df_train.to_csv(path, index = False)
-            path = f"../data/splitted/{self.file_name}/Single_Slab/test_{idx}.csv"
-            df_test.to_csv(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Single_Slab/train_{idx}.parquet"
+            df_train.to_parquet(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Single_Slab/test_{idx}.parquet"
+            df_test.to_parquet(path, index = False)
 
 
     def semi_infinite_slab(self):
@@ -281,32 +293,32 @@ class GeometricSplit:
         Return:
         X_test   : the testing set
         """
-
+        
         for idx, SEED in enumerate(self.SEEDS):
-            normal_vec, lo, high = self._modified_FPS(SEED)
+            np.random.seed(SEED)
+            normal_vec, lo, high = self._find_bounds(SEED)
             epsilon = 0.01
-            cur_proportion = 0
+            cur_proportion = 0            
             
             while cur_proportion < self.test_size or cur_proportion > self.test_size + epsilon:
-                X_lo = self._data_one_side(normal_vec, np.dot(normal_vec, lo))
-                X_high = self._data_one_side(normal_vec, np.dot(normal_vec, high))
-                X_mid = X_high.drop(X_lo.index, errors = "ignore")
-                
-                np.random.seed(SEED)
-                point = X_mid.iloc[np.random.randint(len(X_mid))]
-                
+                point = lo + (high - lo) / 2
+
+                X_mid = self._data_one_side(normal_vec, np.dot(normal_vec, point))
+
                 b = np.dot(normal_vec, point)
                 X_test = self._data_one_side(normal_vec, b)
                 
                 cur_proportion = self._compute_proportion(X_test)
                 if cur_proportion < self.test_size:
-                  lo = point
+                  lo = point + epsilon
                 else:
-                  high = point
-            
+                  high = point - epsilon
+
                 b = np.dot(normal_vec, point)
                 X_test = self._data_one_side(normal_vec, b)
                 
+                cur_proportion = self._compute_proportion(X_test)
+            
             y_test = self.y.iloc[X_test.index]
             X_train = self.X.drop(X_test.index)
             y_train = self.y.iloc[X_train.index]
@@ -315,10 +327,10 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
     
             # Save files using the idx
-            path = f"../data/splitted/{self.file_name}/Semi_Infinite_Slab/train_{idx}.csv"
-            df_train.to_csv(path, index = False)
-            path = f"../data/splitted/{self.file_name}/Semi_Infinite_Slab/test_{idx}.csv"
-            df_test.to_csv(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Semi_Infinite_Slab/train_{idx}.parquet"
+            df_train.to_parquet(path, index = False)
+            path = f"../data/splitted/{self.file_name}/Semi_Infinite_Slab/test_{idx}.parquet"
+            df_test.to_parquet(path, index = False)
             
 
     def kmeans_hyperballs(self, n_clusters):
@@ -342,11 +354,12 @@ class GeometricSplit:
                 if (len(inclusive_data) + len(labels_indices)) / total < self.test_size:
                   inclusive_data = self._union(inclusive_data, set(labels_indices))
                 else:
-                  num = int(test_size * total - len(inclusive_data))
+                  num = int(self.test_size * total - len(inclusive_data))
                   inclusive_data = self._union(inclusive_data, set(labels_indices[:num]))
                 
                 clusters.remove(cl)
-            
+
+            inclusive_data = list(inclusive_data)
             X_train = self.X.drop(inclusive_data)
             y_train = self.y.drop(inclusive_data)
             X_test = self.X.iloc[inclusive_data]
@@ -356,10 +369,10 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
     
             # Save files using the idx
-            path = f"../data/splitted/{self.file_name}/KMeans_Hyperballs/train_{idx}.csv"
-            df_train.to_csv(path, index = False)
-            path = f"../data/splitted/{self.file_name}/KMeans_Hyperballs/test_{idx}.csv"
-            df_test.to_csv(path, index = False)
+            path = f"../data/splitted/{self.file_name}/KMeans_Hyperballs/train_{idx}.parquet"
+            df_train.to_parquet(path, index = False)
+            path = f"../data/splitted/{self.file_name}/KMeans_Hyperballs/test_{idx}.parquet"
+            df_test.to_parquet(path, index = False)
             
     
         
