@@ -1,3 +1,6 @@
+# .DS_Store
+.DS_Store
+
 # Python cache
 __pycache__/
 *.py[cod]
@@ -16,3 +19,17 @@ data/splitted/*/**
 
 # Keep Data_stat_summ folders inside every dataset
 !data/splitted/*/Data_Statistics_Summary/
+
+# Ignore unimportant Report.* files
+Report.aux
+Report.bbl
+Report.blg
+Report.fdb_latexmk
+Report.fls
+Report.log
+Report.out
+Report.synctex.gz
+Report.tex
+Report.toc
+literature.bib
+
