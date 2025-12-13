@@ -693,17 +693,18 @@ def run_split(file, target_column_name, file_prefix_name, meta_features=None, po
     
     return results
 
-def main(file_name, target_column_name, aim, SEEDS):
+def main(file_name, aim, seeds):
     path = f"../data/raw/{file_name}/{file_name}.parquet"
 
     df = pd.read_parquet(path)
     X = df.iloc[:, :-1]
     y = df.iloc[:, -1]
     print(f"Data: {X.shape[0]} samples, {X.shape[1]} features, {len(np.unique(y))} classes")
-    for idx, seed in enumerate(SEEDS):
+    
+    for idx, seed in enumerate(seeds):
         run_split(
             file=df,
-            target_column_name=target_column_name,
+            target_column_name=df.columns[-1],
             file_prefix_name=file_name, #output file name
             meta_features=[aim],
             population_size=10,
