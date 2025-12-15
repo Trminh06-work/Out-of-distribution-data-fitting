@@ -41,15 +41,17 @@ class ToParquet:
                 return pd.read_csv(file_path, sep='\t')
             return None
         except Exception as e:
-            logging.error(f"Error reading {file_path}: {str(e)}")
+            # logging.error(f"Error reading {file_path}: {str(e)}")
             return None
 
     
     def main(self):
         # Loop through all folders in the base directory
-        for folder_name in os.listdir(base_dir):
+        error_folders = []
+        all_data = {}
+        for folder_name in os.listdir(self.base_dir):
             try:
-                folder_path = os.path.join(base_dir, folder_name)
+                folder_path = os.path.join(self.base_dir, folder_name)
                 
                 # Skip .ipynb_checkpoints directory
                 if folder_name == '.ipynb_checkpoints':
@@ -62,11 +64,11 @@ class ToParquet:
                     tsv_path = os.path.join(folder_path, f"{folder_name}.tsv")
                     
                     # Try to read the CSV file
-                    df = read_data_file(csv_path)
+                    df = self._read_data_file(csv_path)
                     
                     # If CSV doesn't exist or couldn't be read, try TSV
                     if df is None:
-                        df = read_data_file(tsv_path)
+                        df = self._read_data_file(tsv_path)
                     
                     # If we successfully loaded data, add it to our dictionary
                     if df is not None:
@@ -96,7 +98,7 @@ class ToParquet:
                 # Log the error and continue with the next folder
                 error_message = f"Error processing folder {folder_name}: {str(e)}"
                 print(error_message)
-                logging.error(error_message)
+                # logging.error(error_message)
                 error_folders.append(folder_name)
             
             print("===" * 20)
@@ -115,7 +117,7 @@ class DatasetStatistics:
         self.X = self.df.iloc[:, :-1]
         self.y = self.df.iloc[:, -1]
 
-
+    
     def plot_distribution(self, feat):
         """
         This function plots the distribution of values w.r.t each feature
@@ -196,5 +198,121 @@ class DatasetStatistics:
         plt.yticks(rotation = 0)
         plt.tight_layout()
         plt.show()
+
+
+class SplittedDatasetStatistics:
+    def __init__(self, train_path, test_path):
+        self.train = DatasetStatistics(train_path)
+        self.test = DatasetStatistics(test_path)
+
+        df_train = self.train.df.copy()
+        df_test = self.test.df.copy()
+        df_train["split"] = "train"
+        df_test["split"] = "test"
+        self.df_all = pd.concat([df_train, df_test], axis=0)
+
+
+    def plot_pairplot(self):
+        g = sns.pairplot(
+            self.df_all,
+            hue="split",
+            diag_kind="kde",
+            plot_kws={
+                "alpha": 0.6,
+                "s": 25,
+                "edgecolor": "white",
+                "linewidth": 0.5,
+            },
+            diag_kws={
+                "fill": True,
+                "linewidth": 1.0,
+            }
+        )
+    
+        # Apply grid to all subplots
+        for ax in g.axes.flatten():
+            if ax is not None:
+                ax.grid(True, linestyle="--", alpha=0.6)
+    
+        # --- Remove duplicate legends from inner axes ---
+        for ax in g.axes.flatten():
+            legend = ax.get_legend()
+            if legend is not None:
+                legend.remove()
+    
+        # --- Add a single clean legend ---
+        g.fig.legend(
+            labels=g._legend_data.keys(),
+            handles=g._legend_data.values(),
+            loc="upper right",
+            bbox_to_anchor=(1.02, 0.98),  # move slightly outside
+            title="Split"
+        )
+    
+        # Figure title
+        g.fig.suptitle("Pairplot of Train vs. Test", fontsize=16, weight="bold")
+        g.fig.tight_layout()
+        g.fig.subplots_adjust(top=0.95)
+    
+        plt.show()
+
+
+    def plot_distribution(self, feat):
+        sns.histplot(
+            data = self.df_all,
+            x = feat,
+            bins = 50,
+            stat = "density",
+            fill = False,
+            hue = "split",
+            kde = True,     # also add KDE curves
+            alpha = 0.5
+        )
+        plt.grid(True, linestyle = "--", alpha = 0.6)
+        plt.title(f"Distribution of {feat} of Train vs. Test", fontsize = 14, weight = "bold")
+        plt.tight_layout()
+        plt.show()
+
+
+    def print_stat_sum(self):
+        print("==" * 20 + "Train data Statistics Summary" + "==" * 20)
+        self.train.print_stat_sum()
+        print("==" * 20 + "Test data Statistics Summary" + "==" * 20)
+        self.test.print_stat_sum()
+
+
+    def plot_boxplot(self):
+        fig, axes = plt.subplots(1, 2, figsize=(15, 6))
         
+        # ------- Train -------
+        df_scaled_train = pd.DataFrame(
+            StandardScaler().fit_transform(self.train.df),
+            columns=self.train.df.columns
+        )
         
+        sns.boxplot(data=df_scaled_train, orient="h", ax=axes[0])
+        axes[0].set_xlabel("Standardized Value (z-score)")
+        axes[0].set_title("Train: Standardized Features", fontsize=14, weight="bold")
+        axes[0].grid(True, linestyle="--", alpha=0.6)
+        
+        # ------- Test -------
+        df_scaled_test = pd.DataFrame(
+            StandardScaler().fit_transform(self.test.df),
+            columns=self.test.df.columns
+        )
+        
+        sns.boxplot(data=df_scaled_test, orient="h", ax=axes[1])
+        axes[1].set_xlabel("Standardized Value (z-score)")
+        axes[1].set_title("Test: Standardized Features", fontsize=14, weight="bold")
+        axes[1].grid(True, linestyle="--", alpha=0.6)
+        
+        plt.tight_layout()
+        plt.show()
+
+
+    def plot_corr_heatmap(self):
+        print("==" * 20 + "Train data Correlation Heatmap" + "==" * 20)
+        self.train.plot_corr_heatmap()
+        print("==" * 20 + "Test data Correlation Heatmap" + "==" * 20)
+        self.test.plot_corr_heatmap()
+                        

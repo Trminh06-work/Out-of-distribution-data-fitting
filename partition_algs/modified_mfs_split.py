@@ -16,6 +16,7 @@ Modifications:
     import multiprocessing -> modify _setup_deap() and add __del__()
     save_pareto_solution() -> remove train/test pair information summary and save as .parquet files
     create_convergence_plot() -> unecessary
+    remove samples in extensive dataset -> keep 800,000 samples for the sake of speed and efficiency
 '''
 import numpy as np
 import random
@@ -693,13 +694,27 @@ def run_split(file, target_column_name, file_prefix_name, meta_features=None, po
     
     return results
 
-def main(file_name, aim, seeds):
+
+def main(file_name, aim, seeds, keep_size = False):
+    # Create directory if not exist
+    output_dir = f"../data/splitted/{file_name}/Mfs_based_Split"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
     path = f"../data/raw/{file_name}/{file_name}.parquet"
 
     df = pd.read_parquet(path)
     X = df.iloc[:, :-1]
     y = df.iloc[:, -1]
     print(f"Data: {X.shape[0]} samples, {X.shape[1]} features, {len(np.unique(y))} classes")
+
+    # Keep 800,000 samples for the sake of speed and efficiency
+    if df.shape[0] > 1000000 and not keep_size:
+        df = df.sample(n = 800000, random_state = 42) 
+        X = df.iloc[:, :-1]
+        y = df.iloc[:, -1]
+        print("Remove some samples due to extensive size")
+        print(f"New Data: {X.shape[0]} samples, {X.shape[1]} features, {len(np.unique(y))} classes")
     
     for idx, seed in enumerate(seeds):
         run_split(

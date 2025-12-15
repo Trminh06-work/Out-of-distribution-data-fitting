@@ -11,14 +11,12 @@ __pycache__/
 # OS files
 .DS_Store
 
-# Ignore all raw data
-data/raw/
-
 # Ignore all nested directories under data/splitted
 data/splitted/*/**
 
 # Keep Data_stat_summ folders inside every dataset
 !data/splitted/*/Data_Statistics_Summary/
+!data/splitted/*/Splitted_Data_Statistics_Summary/
 
 # Ignore unimportant Report.* files
 Report.aux
@@ -32,4 +30,6 @@ Report.synctex.gz
 Report.tex
 Report.toc
 literature.bib
-
+logo.jpg
+Report/sections
+Report/figures

@@ -19,7 +19,8 @@ def random_split(file_name, SEEDS, test_size):
         X_train, X_test, y_train, y_test = train_test_split(
             X, y,
             test_size = test_size,
-            random_state = seed
+            random_state = seed,
+            shuffle = True
         )
 
         df_train = pd.concat([X_train, y_train], axis = 1)

@@ -49,17 +49,17 @@ class MarginalDistributionSplit:
         return col_mask
 
 
-    def covariate_prior_shift(self):
+    def covariate_shift(self):
         """
-            Repeatedly loop through all features and the target, based on predefined TEST_SIZE/TRAIN_SIZE and their distributions to split the dataset.
+            Repeatedly loop through all features, based on predefined TEST_SIZE/TRAIN_SIZE and their distributions to split the dataset.
         """
 
         # Create directory if not exist
-        output_dir = f"../data/splitted/{self.file_name}/Covariate_Prior_Shift"
+        output_dir = f"../data/splitted/{self.file_name}/Covariate_Shift"
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         
-        for idx, feat in enumerate(self.df.columns):
+        for idx, feat in enumerate(self.df.columns[:-1]):
             mask = self._distribution_based_selection(feat)
             X_train = self.X[mask]
             y_train = self.y[mask]
