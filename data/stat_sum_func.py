@@ -234,22 +234,26 @@ class SplittedDatasetStatistics:
             if ax is not None:
                 ax.grid(True, linestyle="--", alpha=0.6)
     
-        # --- Remove duplicate legends from inner axes ---
+        # --- Remove legends from each subplot ---
         for ax in g.axes.flatten():
             legend = ax.get_legend()
             if legend is not None:
                 legend.remove()
     
-        # --- Add a single clean legend ---
+        # --- Remove seaborn's automatically created main legend ---
+        if g._legend is not None:
+            g._legend.remove()
+    
+        # --- Add your custom legend ---
         g.fig.legend(
             labels=g._legend_data.keys(),
             handles=g._legend_data.values(),
             loc="upper right",
-            bbox_to_anchor=(1.02, 0.98),  # move slightly outside
+            bbox_to_anchor=(1.02, 0.98),
             title="Split"
         )
     
-        # Figure title
+        # Title
         g.fig.suptitle("Pairplot of Train vs. Test", fontsize=16, weight="bold")
         g.fig.tight_layout()
         g.fig.subplots_adjust(top=0.95)
