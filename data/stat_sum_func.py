@@ -314,9 +314,40 @@ class SplittedDatasetStatistics:
         plt.show()
 
 
+    def plot_corr_indv_heatmap(self, df, title):
+        target = df.columns[-1]
+
+        plt.figure(figsize=(10, 8))
+        
+        ax = sns.heatmap(
+            df.corr(),
+            cmap = "coolwarm",          # use cmap, not color
+            annot = True,               # show correlation values
+            fmt = ".2f",                # 2 decimal places
+            linewidths = 0.5,
+            square = True,
+            vmin = -1, vmax = 1,
+            cbar_kws = {"shrink": 0.8, "label": "Pearson's correlation"}
+        )
+        
+        # Bold target on x-axis
+        for label in ax.get_xticklabels():
+            if label.get_text() == target:
+                label.set_fontweight("bold")
+        
+        # Bold target on y-axis
+        for label in ax.get_yticklabels():
+            if label.get_text() == target:
+                label.set_fontweight("bold")
+        
+        plt.title(f"Correlation Between Features and Target ({title})", fontsize = 14, weight = "bold")
+        plt.xticks(rotation = 45, ha = "right")
+        plt.yticks(rotation = 0)
+        plt.tight_layout()
+        plt.show()
+
+
     def plot_corr_heatmap(self):
-        print("==" * 20 + "Train data Correlation Heatmap" + "==" * 20)
-        self.train.plot_corr_heatmap()
-        print("==" * 20 + "Test data Correlation Heatmap" + "==" * 20)
-        self.test.plot_corr_heatmap()
+        self.plot_corr_indv_heatmap(self.train.df, "Train")
+        self.plot_corr_indv_heatmap(self.test.df, "Test")
                         
