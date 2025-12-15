@@ -17,6 +17,7 @@ data/splitted/*/**
 # Keep Data_stat_summ folders inside every dataset
 !data/splitted/*/Splitted_Data_Statistics_Summary/
 !data/splitted/*/Splitted_Data_Statistics_Summary/**
+!data/splitted/*/Splitted_Data_Statistics_Summary.ipynb
 
 # Ignore unimportant Report.* files
 Report.aux
