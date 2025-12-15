@@ -3,7 +3,10 @@ import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
 
-def random_split(file_name, SEEDS, test_size):
+def random_split(file_name, SEEDS, test_size, keep_size = False):
+    """
+        keep_size: (default: False) -> set to True to keep the big-sized data, >1M samples
+    """
     # Create directory if not exist
     output_dir = f"../data/splitted/{file_name}/Random_Split"
     if not os.path.exists(output_dir):
@@ -12,6 +15,12 @@ def random_split(file_name, SEEDS, test_size):
     # Read data
     data_path = f"../data/raw/{file_name}/{file_name}.parquet"
     df = pd.read_parquet(data_path)
+
+    if df.shape[0] > 1000000 and not keep_size:
+        df = df.sample(n = 800000, random_state = 42).reset_index(drop=True)
+        print("Remove some samples due to extensive size")
+        print(f"New Data: {df.shape[0]} samples, {df.shape[1]} features")
+    
     X = df.iloc[:, :-1]
     y = df.iloc[:, -1]
     

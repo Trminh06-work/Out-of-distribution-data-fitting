@@ -4,8 +4,19 @@ import pandas as pd
 from sklearn.cluster import KMeans
 
 class MarginalDistributionSplit:
-    def __init__(self, file_name, df, test_size):
+    def __init__(self, file_name, df, test_size, keep_size = False):
+        """
+            keep_size: (default: False) -> set to True to keep the big-sized data, >1M samples
+        """
         self.file_name = file_name
+
+        if df.shape[0] > 1000000 and not keep_size:
+            df = df.sample(n = 800000, random_state = 42).reset_index(drop=True)
+            X = df.iloc[:, :-1]
+            y = df.iloc[:, -1]
+            print("Remove some samples due to extensive size")
+            print(f"New Data: {X.shape[0]} samples, {X.shape[1]} features")
+
         self.df = df
         self.X = df.iloc[:, :-1]
         self.y = df.iloc[:, -1]
