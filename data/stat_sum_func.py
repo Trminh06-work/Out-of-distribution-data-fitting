@@ -215,6 +215,7 @@ class SplittedDatasetStatistics:
     def plot_pairplot(self):
         g = sns.pairplot(
             self.df_all,
+            corner = True,
             hue="split",
             diag_kind="kde",
             plot_kws={
@@ -235,10 +236,10 @@ class SplittedDatasetStatistics:
                 ax.grid(True, linestyle="--", alpha=0.6)
     
         # --- Remove legends from each subplot ---
-        for ax in g.axes.flatten():
-            legend = ax.get_legend()
-            if legend is not None:
-                legend.remove()
+        # for ax in g.axes.flatten():
+        #     legend = ax.get_legend()
+        #     if legend is not None:
+        #         legend.remove()
     
         # --- Remove seaborn's automatically created main legend ---
         if g._legend is not None:

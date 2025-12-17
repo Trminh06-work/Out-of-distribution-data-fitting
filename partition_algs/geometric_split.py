@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.cluster import KMeans
 
 class GeometricSplit:
-    def __init__(self, file_name, df, test_size, keep_size = False):
+    def __init__(self, file_name, df, test_size, seeds, keep_size = False):
         """
             keep_size: (default: False) -> set to True to keep the big-sized data, >1M samples
         """
@@ -20,7 +20,7 @@ class GeometricSplit:
         self.y = df.iloc[:, -1]
         self.test_size = test_size
         self.train_size = 1 - test_size
-        self.SEEDS = [0, 42, 19, 2, 23, 11, 37, 29, 57, 5] # 10 random SEEDs to construct CI
+        self.SEEDS = seeds # 10 random SEEDs to construct CI
 
     """
     Supportive functions:
@@ -113,8 +113,8 @@ class GeometricSplit:
         """
             Returns the points in X whose distance from the Hyperplane, defined by "normal_vec", "b", is less than "delta"
         """
-        # | X.dot(normal_vector) - b | < delta
-        return self.X[np.abs(self.X @ normal_vec - b) < delta]
+        # | (X.dot(normal_vector) - b / ||normal_vec||) | < delta
+        return self.X[(np.abs(self.X @ normal_vec - b) / np.linalg.norm(normal_vec)) < delta]
 
 
     def _data_one_side(self, normal_vec, b):

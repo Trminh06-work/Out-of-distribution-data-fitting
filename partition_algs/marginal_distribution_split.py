@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.cluster import KMeans
 
 class MarginalDistributionSplit:
-    def __init__(self, file_name, df, test_size, keep_size = False):
+    def __init__(self, file_name, df, test_size, seeds, keep_size = False):
         """
             keep_size: (default: False) -> set to True to keep the big-sized data, >1M samples
         """
@@ -22,7 +22,7 @@ class MarginalDistributionSplit:
         self.y = df.iloc[:, -1]
         self.test_size = test_size
         self.train_size = 1 - test_size
-        self.SEEDS = [0, 42, 19, 2, 23, 11, 37, 29, 57, 5] # 10 random SEEDs to construct CI
+        self.SEEDS = seeds # 10 random SEEDs to construct CI
 
     """
     Supportive function:
@@ -72,10 +72,10 @@ class MarginalDistributionSplit:
         
         for idx, feat in enumerate(self.df.columns[:-1]):
             mask = self._distribution_based_selection(feat)
-            X_train = self.X[mask]
-            y_train = self.y[mask]
-            X_test = self.X[~mask]
-            y_test = self.y[~mask]
+            X_train = self.X[~mask]
+            y_train = self.y[~mask]
+            X_test = self.X[mask]
+            y_test = self.y[mask]
 
             df_train = pd.concat([X_train, y_train], axis = 1)
             df_test = pd.concat([X_test, y_test], axis = 1)
