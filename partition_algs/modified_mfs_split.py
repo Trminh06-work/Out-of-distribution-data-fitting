@@ -717,6 +717,8 @@ def main(file_name, aim, seeds, keep_size = False):
         print(f"New Data: {X.shape[0]} samples, {X.shape[1]} features, {len(np.unique(y))} classes")
     
     for idx, seed in enumerate(seeds):
+        if idx < 6:
+            continue
         run_split(
             file=df,
             target_column_name=df.columns[-1],

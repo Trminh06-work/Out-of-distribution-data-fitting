@@ -69,9 +69,16 @@ class MarginalDistributionSplit:
         output_dir = f"../data/splitted/{self.file_name}/Covariate_Shift"
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
+
+        idx = 0
         
-        for idx, feat in enumerate(self.df.columns[:-1]):
+        for feat in self.df.columns[:-1]:
             mask = self._distribution_based_selection(feat)
+
+            if mask.sum() / self.df.shape[0] < self.test_size:
+                print(f"Skip {feat} feature due to insufficient test samples")
+                continue
+            
             X_train = self.X[~mask]
             y_train = self.y[~mask]
             X_test = self.X[mask]
@@ -85,6 +92,8 @@ class MarginalDistributionSplit:
             df_train.to_parquet(path, index = False)
             path = os.path.join(output_dir, f"test_{idx}.parquet")
             df_test.to_parquet(path, index = False)
+
+            idx += 1
             
         
 
