@@ -6,3 +6,4 @@ scikit-learn~=1.5
 deap~=1.4
 pymfe~=0.4
 scipy~=1.12.0
+optuna~=4.6.0

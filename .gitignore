@@ -33,3 +33,7 @@ literature.bib
 logo.jpg
 Report/sections
 Report/figures
+
+# Ignore unimportant files in models/ folders
+lightning_logs/
+optuna.db
