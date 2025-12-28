@@ -10,10 +10,26 @@ import gc
 import copy
 from collections import defaultdict
 
+from sklearn.preprocessing import StandardScaler
+
 from Models import ModelConfig, \
     LinearRegressor, PolynomialRegressor, KNNRegressor, SVMRegressor, \
     DTRegressor, RFRegressor, GBRegressor, ABRegressor, XGBRegressor, LightGBMRegressor, \
     RealMLPRegressor, ResnetRegressor
+
+import logging
+
+import warnings
+warnings.filterwarnings("ignore")
+warnings.filterwarnings(
+    "ignore",
+    message=r".*tensorboardX.*removed.*",
+    category=UserWarning,
+    module=r"pytorch_lightning.*",
+)
+logging.getLogger("pytorch_lightning").setLevel(logging.ERROR)
+logging.getLogger("lightning").setLevel(logging.ERROR)
+
 
 MODEL_REGISTRY = {
     "LinearRegressor": LinearRegressor,
@@ -62,11 +78,9 @@ class DataSaver:
         raise TypeError
 
 
-    def save_result(self, file_name, results):
-        save_dir = os.path.join(self.output_dir, self.model_name)
-        os.makedirs(save_dir, exist_ok=True)
-        out_file = os.path.join(save_dir, f"{file_name}.json")
-
+    def save_result(self, out_file, results):
+        # Save path:  Results/{model_name}/{file_name}.json
+        # where in each .json file, it encompasses of results for all types of split
         try:
             with open(out_file, "w") as f:
                 json.dump(results, f, indent = 2, default = self._to_python)
@@ -86,8 +100,8 @@ class EvaluateModel:
 
 
     def _process(self, df_train, df_test):
+        config = copy.deepcopy(self.config)
         if self.model_name in list(MODEL_REGISTRY.keys())[-3:]:
-            config = copy.deepcopy(self.config)
             config.use_optim = False
 
         if self.model_class is not ResnetRegressor:
@@ -108,6 +122,13 @@ class EvaluateModel:
         for file_name in tqdm(ds_lst, desc = "Dataset processing"):
             results = defaultdict(dict)
 
+            save_dir = os.path.join("Results/", self.model_name)
+            os.makedirs(save_dir, exist_ok=True)
+            out_file = os.path.join(save_dir, f"{file_name}.json")
+            if os.path.exists(out_file):
+                tqdm.write("Skip due to file exists")
+                continue
+
             for split_type in tqdm(SPLIT_TYPES, desc = f"Processing {file_name} splits", leave = False):
                 folder = Path(os.path.join(path, file_name, split_type))
                 train_files = sorted(folder.glob("train_*.parquet"))
@@ -121,8 +142,18 @@ class EvaluateModel:
                         continue
 
                     try:
+                        scaler = StandardScaler()
                         df_train = pd.read_parquet(train_file)
                         df_test = pd.read_parquet(test_file)
+
+                        df_train = pd.DataFrame(
+                            scaler.fit_transform(df_train),
+                            columns = df_train.columns
+                        )
+                        df_test = pd.DataFrame(
+                            scaler.transform(df_test),
+                            columns = df_test.columns
+                        )
                     except Exception as e:
                         tqdm.write(f"Read failed for idx = {idx}: {e}")
                         continue
@@ -132,6 +163,6 @@ class EvaluateModel:
                     del df_train, df_test
                     gc.collect()
 
-            data_saver.save_result(file_name, results)
+            data_saver.save_result(out_file, results)
 
 

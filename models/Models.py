@@ -13,9 +13,9 @@ from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures
+from sklearn.compose import TransformedTargetRegressor
 from sklearn.linear_model import SGDRegressor
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, AdaBoostRegressor
 import xgboost as xgb
@@ -28,6 +28,7 @@ from sklearn.base import BaseEstimator
 import logging
 
 import warnings
+warnings.filterwarnings("ignore")
 warnings.filterwarnings(
     "ignore",
     message=r".*tensorboardX.*removed.*",
@@ -75,10 +76,12 @@ class BaseTabularRegressor(ABC):
         self.config = config
 
         # Split X/y (assumes last column is target)
-        self.X_train = df_train.iloc[:, :-1]
-        self.y_train = df_train.iloc[:, -1]
-        self.X_test = df_test.iloc[:, :-1]
-        self.y_test = df_test.iloc[:, -1]
+        if df_train is not None:
+            self.X_train = df_train.iloc[:, :-1]
+            self.y_train = df_train.iloc[:, -1]
+        if df_test is not None:
+            self.X_test = df_test.iloc[:, :-1]
+            self.y_test = df_test.iloc[:, -1]
 
         self.model: BaseEstimator = self.build_model()
 
@@ -178,13 +181,13 @@ class LinearRegressor(BaseTabularRegressor):
         self.max_iter = max_iter
         self.tol = tol
         self.l1_ratio = l1_ratio
+        self.config = config
         super().__init__(df_train, df_test, config) # return self.model
 
 
     def build_model(self):
-        return make_pipeline(
-            StandardScaler(),
-            SGDRegressor(
+        # Scale both X and y so the SGD step sizes stay stable across datasets
+        return SGDRegressor(
                 loss = "huber",
                 penalty = "elasticnet",
                 l1_ratio = self.l1_ratio,
@@ -193,14 +196,13 @@ class LinearRegressor(BaseTabularRegressor):
                 max_iter = self.max_iter,
                 tol = self.tol,
                 random_state = self.config.seed,
-            ),
-        )
+            )
 
 
     def optim_model_name(self) -> Optional[str]:
         # Must match your OptunaTuner registry key
         return "HuberSGD"
-        
+
 
 
 class PolynomialRegressor(BaseTabularRegressor):
@@ -223,23 +225,23 @@ class PolynomialRegressor(BaseTabularRegressor):
 
 
     def build_model(self):
+        # Scale both X and y to stabilize SGD across datasets
         return make_pipeline(
-            PolynomialFeatures(
-                degree = self.degree,
-                include_bias = False
-            ),
-            StandardScaler(),
-            SGDRegressor(
-                loss = "huber",
-                penalty = "elasticnet",
-                epsilon = self.epsilon,
-                alpha = self.alpha,
-                max_iter = self.max_iter,
-                tol = self.tol,
-                l1_ratio = self.l1_ratio,
-                random_state = self.config.seed,
+                PolynomialFeatures(
+                    degree = self.degree,
+                    include_bias = False
+                ),
+                SGDRegressor(
+                    loss = "huber",
+                    penalty = "elasticnet",
+                    epsilon = self.epsilon,
+                    alpha = self.alpha,
+                    max_iter = self.max_iter,
+                    tol = self.tol,
+                    l1_ratio = self.l1_ratio,
+                    random_state = self.config.seed,
+                )
             )
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -262,13 +264,10 @@ class KNNRegressor(BaseTabularRegressor):
 
 
     def build_model(self):
-        return make_pipeline(
-            StandardScaler(),
-            KNeighborsRegressor(
+        return KNeighborsRegressor(
                 n_neighbors = self.n_neighbors,
                 weights = self.weights
             )
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -293,9 +292,8 @@ class SVMRegressor(BaseTabularRegressor):
 
 
     def build_model(self):
-        return make_pipeline(
-            StandardScaler(),
-            SGDRegressor(
+        # Scale both X and y to keep epsilon-insensitive SGD stable
+        return SGDRegressor(
                 loss = "epsilon_insensitive",
                 epsilon = self.epsilon,
                 alpha = self.alpha,
@@ -303,7 +301,6 @@ class SVMRegressor(BaseTabularRegressor):
                 tol = self.tol,
                 random_state = self.config.seed,
             )
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -328,16 +325,13 @@ class DTRegressor(BaseTabularRegressor):
 
 
     def build_model(self):
-        return make_pipeline(
-            StandardScaler(),
-            DecisionTreeRegressor(
+        return DecisionTreeRegressor(
                 random_state = self.config.seed,
                 max_depth = self.max_depth,
                 min_samples_leaf = self.min_samples_leaf,
                 min_samples_split = self.min_samples_split,
                 max_features = self.max_features,
             )
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -353,7 +347,7 @@ class RFRegressor(BaseTabularRegressor):
         config: ModelConfig,
         n_estimators = 400, max_samples = None, n_jobs = -1,
         max_depth = 12, min_samples_leaf = 20,
-        min_samples_split = 40, max_features = "sqrt",    
+        min_samples_split = 40, max_features = "sqrt",
     ):
         self.n_estimators = n_estimators
         self.max_samples = max_samples
@@ -366,9 +360,7 @@ class RFRegressor(BaseTabularRegressor):
 
 
     def build_model(self):
-        return make_pipeline(
-            StandardScaler(),
-            RandomForestRegressor(
+        return RandomForestRegressor(
                 random_state = self.config.seed,
                 n_estimators = self.n_estimators,
                 max_depth = self.max_depth,
@@ -378,7 +370,6 @@ class RFRegressor(BaseTabularRegressor):
                 max_samples = self.max_samples,
                 n_jobs = self.n_jobs
             )
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -410,9 +401,7 @@ class GBRegressor(BaseTabularRegressor):
 
 
     def build_model(self):
-        return make_pipeline(
-            StandardScaler(),
-            GradientBoostingRegressor(
+        return GradientBoostingRegressor(
                 random_state = self.config.seed,
                 n_estimators = self.n_estimators,
                 learning_rate = self.learning_rate,
@@ -423,7 +412,6 @@ class GBRegressor(BaseTabularRegressor):
                 max_features = self.max_features,
                 tol = self.tol,
             )
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -459,15 +447,12 @@ class ABRegressor(BaseTabularRegressor):
             max_features = self.max_features,
         )
 
-        return make_pipeline(
-            StandardScaler(),
-            AdaBoostRegressor(
+        return AdaBoostRegressor(
                 random_state = self.config.seed,
                 estimator = base_estimator,
                 n_estimators = self.n_estimators,
                 learning_rate = self.learning_rate,
             )
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -501,9 +486,7 @@ class XGBRegressor(BaseTabularRegressor):
 
 
     def build_model(self):
-        return make_pipeline(
-            StandardScaler(),
-            xgb.XGBRegressor(
+        return xgb.XGBRegressor(
                 random_state = self.config.seed,
                 n_jobs = self.n_jobs,
                 max_depth = self.max_depth,
@@ -516,7 +499,6 @@ class XGBRegressor(BaseTabularRegressor):
                 gamma = self.gamma,
                 max_bin = self.max_bin,
             ),
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -558,8 +540,7 @@ class LightGBMRegressor(BaseTabularRegressor):
 
 
     def build_model(self):
-        return make_pipeline(
-            LGBMRegressor(
+        return LGBMRegressor(
                 verbosity = -1,
                 random_state = self.config.seed,
                 n_jobs = self.n_jobs,
@@ -574,7 +555,6 @@ class LightGBMRegressor(BaseTabularRegressor):
                 min_child_samples = self.min_child_samples,
                 # early_stopping_rounds = self.early_stopping_rounds,
             )
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -644,25 +624,30 @@ class CreateDataLoader:
             random_state = seed,
         )
 
-        # Normalization
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(X_train)
-        X_val = scaler.transform(X_val)
-        X_test = scaler.transform(X_test)
-
         # Save
-        self.X_train = torch.tensor(X_train, dtype = torch.float32)
-        self.X_val = torch.tensor(X_val, dtype = torch.float32)
+        self.X_train = self._to_tensor(X_train)
+        self.X_val = self._to_tensor(X_val)
 
         # Do not convert X_test and y_test, keep it in pd.DataFrame to plot it later
-        self.X_test_tensor = torch.tensor(X_test, dtype = torch.float32)
+        self.X_test_tensor = self._to_tensor(X_test)
 
-        self.y_train = torch.as_tensor(y_train.to_numpy(), dtype=torch.float32).view(-1)
-        self.y_val   = torch.as_tensor(y_val.to_numpy(),   dtype=torch.float32).view(-1)
-
+        self.y_train = self._to_tensor(y_train)
+        self.y_val   = self._to_tensor(y_val)
 
         self.batch_size = batch_size
         self.is_shuffle = is_shuffle
+
+
+    def _to_tensor(self, X):
+        if isinstance(X, pd.DataFrame):
+            X = X.to_numpy(dtype=np.float32, copy=False)
+        else:
+            X = np.asarray(X, dtype=np.float32)
+
+        if X.ndim == 1:
+            X = X.reshape(-1)
+
+        return torch.from_numpy(X)
 
 
     def create(self):
@@ -691,7 +676,7 @@ class DeepTabularRegressor(BaseTabularRegressor):
         df_train: pd.DataFrame, df_test: pd.DataFrame,
         config: ModelConfig,
         epochs: int = 100,
-        batch_size: int = 512,
+        batch_size: int = 2048,
         seed: int = 42,
     ):
         self.device = pick_device()
@@ -708,12 +693,13 @@ class DeepTabularRegressor(BaseTabularRegressor):
                                weight_decay = self.weight_decay
                             )
 
-        DataloaderCreator = CreateDataLoader(
-            self.X_train, self.X_test, self.y_train, self.y_test,
-            batch_size = batch_size, seed = seed
-        )
-        self.train_loader, self.val_loader = DataloaderCreator.create()
-        self.X_test_tensor = DataloaderCreator.X_test_tensor.to(self.device)
+        if df_test is not None:
+            DataloaderCreator = CreateDataLoader(
+                self.X_train, self.X_test, self.y_train, self.y_test,
+                batch_size = batch_size, seed = seed
+            )
+            self.train_loader, self.val_loader = DataloaderCreator.create()
+            self.X_test_tensor = DataloaderCreator.X_test_tensor.to(self.device)
 
 
     def _to_numpy(self, x):
@@ -762,6 +748,17 @@ class DeepTabularRegressor(BaseTabularRegressor):
         train_adjusted_r2 = []
         val_adjusted_r2 = []
 
+        if X is not None and y is not None:
+            X = self._to_tensor(X)
+            y = self._to_tensor(y)
+            train_dataset = CustomDataset(X, y)
+            self.train_loader = DataLoader(
+                train_dataset,
+                batch_size = self.batch_size,
+                shuffle = True,
+                num_workers = 0,
+            )
+
         for epoch in range(self.epochs):
             train_loss = 0.0
             train_target = []
@@ -772,7 +769,7 @@ class DeepTabularRegressor(BaseTabularRegressor):
             for X_samples, y_samples in self.train_loader:
                 X_samples, y_samples = X_samples.to(self.device), y_samples.to(self.device)
                 self.optimizer.zero_grad()
-                y_preds = self.model(X_samples)
+                y_preds = self.model(X_samples).view(-1)
                 loss = self.criterion(y_preds, y_samples)
                 loss.backward()
                 self.optimizer.step()
@@ -842,6 +839,7 @@ class DeepTabularRegressor(BaseTabularRegressor):
             y_pred = self.model(X_test).detach().cpu().numpy()
             return y_pred
 
+
     def _plot_train_progress(
         self,
         train_losses, val_losses,
@@ -895,8 +893,8 @@ class RealMLPRegressor(BaseTabularRegressor):
 
 
     def build_model(self):
-        return make_pipeline(
-            RealMLP_TD_Regressor(
+        # Wrap with target scaling to keep loss scale consistent across datasets
+        return RealMLP_TD_Regressor(
                 device = pick_device(),
                 random_state = self.config.seed,
                 n_epochs = self.n_epochs,
@@ -912,7 +910,6 @@ class RealMLPRegressor(BaseTabularRegressor):
                 use_plr_embeddings = False, use_parametric_act = False, # for faster training
                 act = "mish" # activation function for regression
             )
-        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -998,7 +995,7 @@ class ResNet(nn.Module):
         )
 
         self.param_dict = {
-            "df_train": df_train, "df_test": df_test,
+            "df_train": None, "df_test": None,
             "config": config,
 
             "d_in": d_in,
@@ -1052,7 +1049,7 @@ class ResnetRegressor(DeepTabularRegressor):
         lr: float = 1e-3,
         weight_decay: float = 1e-4,
         epochs: int = 100,
-        batch_size: int = 1024
+        batch_size: int = 2048,
     ):
         self.param_dict = {
             "df_train": df_train, "df_test": df_test,
@@ -1080,7 +1077,7 @@ class ResnetRegressor(DeepTabularRegressor):
 
 
     def build_model(self):
-            return ResNet(**self.param_dict)
+        return ResNet(**self.param_dict)
 
 
     def optim_model_name(self) -> Optional[str]:

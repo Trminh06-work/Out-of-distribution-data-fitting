@@ -32,6 +32,7 @@ from Models import ResNet, ResnetRegressor, pick_device, ModelConfig
 import logging
 
 import warnings
+warnings.filterwarnings("ignore")
 warnings.filterwarnings(
     "ignore",
     message=r".*tensorboardX.*removed.*",
@@ -272,10 +273,7 @@ def huber_sgd_space(trial):
 
 
 def huber_sgd_build(params, seed):
-    return make_pipeline(
-        StandardScaler(),
-        SGDRegressor(loss="huber", random_state=seed, **params),
-    )
+    return SGDRegressor(loss="huber", random_state = seed, **params)
 
 # Polynomial Regression with Huber loss + L1-Regularization using ElasticNet
 def poly_sgd_space(trial):
@@ -293,7 +291,6 @@ def poly_sgd_space(trial):
 def poly_sgd_build(params, seed):
     model =  make_pipeline(
         PolynomialFeatures(include_bias = False),
-        StandardScaler(),
         SGDRegressor(loss = "huber", random_state = seed, penalty = "elasticnet")
     )
     model.set_params(**params)
@@ -309,10 +306,7 @@ def knn_reg_space(trial):
 
 
 def knn_reg_build(params, seed):
-    return make_pipeline(
-        StandardScaler(),
-        KNeighborsRegressor(**params)
-    )
+    return KNeighborsRegressor(**params)
 
 
 # Support Vector Machine Regressor
@@ -326,10 +320,7 @@ def svm_reg_space(trial):
 
 
 def svm_reg_build(params, seed):
-    return make_pipeline(
-        StandardScaler(),
-        SGDRegressor(loss = "epsilon_insensitive", random_state = seed, **params)
-    )
+    return SGDRegressor(loss = "epsilon_insensitive", random_state = seed, **params)
 
 
 # Decision Tree Regressor
@@ -343,10 +334,7 @@ def dt_reg_space(trial):
 
 
 def dt_reg_build(params, seed):
-    return make_pipeline(
-        StandardScaler(),
-        DecisionTreeRegressor(random_state = seed, **params)
-    )
+    return DecisionTreeRegressor(random_state = seed, **params)
 
 
 # Random Forest Regressor
@@ -371,10 +359,7 @@ def rf_reg_space(trial):
 
 
 def rf_reg_build(params, seed):
-    return make_pipeline(
-        StandardScaler(),
-        RandomForestRegressor(random_state = seed, **params)
-    )
+    return RandomForestRegressor(random_state = seed, **params)
 
 
 # Gradient Boosting Regressor
@@ -400,10 +385,7 @@ def gb_reg_space(trial):
 
 
 def gb_reg_build(params, seed):
-    return make_pipeline(
-        StandardScaler(),
-        GradientBoostingRegressor(random_state = seed, **params)
-    )
+    return GradientBoostingRegressor(random_state = seed, **params)
 
 
 # AdaBoost Regressor
@@ -444,15 +426,12 @@ def ab_reg_build(params, seed):
         max_features = params["max_features"],
     )
 
-    return make_pipeline(
-        StandardScaler(),
-        AdaBoostRegressor(
+    return AdaBoostRegressor(
             random_state = seed,
             estimator = base_estimator,
             n_estimators = params["n_estimators"],
             learning_rate = params["learning_rate"],
         )
-    )
 
 
 # XGBoost Regressor
@@ -481,10 +460,7 @@ def xgb_reg_space(trial):
 
 
 def xgb_reg_build(params, seed):
-    return make_pipeline(
-            StandardScaler(),
-            xgb.XGBRegressor(random_state = seed, n_jobs = -1, **params)
-        )
+    return xgb.XGBRegressor(random_state = seed, n_jobs = -1, **params)
 
 
 # LightGBM Regressor
