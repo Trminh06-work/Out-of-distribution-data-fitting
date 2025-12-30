@@ -1,6 +1,3 @@
-import os, tempfile
-from contextlib import contextmanager
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,8 +9,7 @@ from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler, PolynomialFeatures
-from sklearn.compose import TransformedTargetRegressor
+from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import SGDRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
@@ -22,6 +18,7 @@ import xgboost as xgb
 from lightgbm import LGBMRegressor
 
 from pytabkit import RealMLP_TD_Regressor
+from ft_transformer import FTTransformer
 
 from sklearn.base import BaseEstimator
 
@@ -174,7 +171,7 @@ class LinearRegressor(BaseTabularRegressor):
         config: ModelConfig,
         epsilon = 1.35, alpha = 1e-4,
         max_iter = 5000, tol = 1e-4,
-        l1_ratio = 0.5
+        l1_ratio = 0.2
     ):
         self.epsilon = epsilon
         self.alpha = alpha
@@ -200,7 +197,7 @@ class LinearRegressor(BaseTabularRegressor):
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "HuberSGD"
 
 
@@ -211,9 +208,9 @@ class PolynomialRegressor(BaseTabularRegressor):
         df_train: pd.DataFrame, df_test: pd.DataFrame,
         config: ModelConfig,
         degree: int = 2,
-        epsilon = 1.35, alpha = 1e-4,
+        epsilon = 1.35, alpha = 5e-4,
         max_iter = 5000, tol = 1e-4,
-        l1_ratio = 0.5
+        l1_ratio = 0.25
     ):
         self.degree = degree
         self.epsilon = epsilon
@@ -229,7 +226,8 @@ class PolynomialRegressor(BaseTabularRegressor):
         return make_pipeline(
                 PolynomialFeatures(
                     degree = self.degree,
-                    include_bias = False
+                    include_bias = False,
+                    interaction_only = True, # reduces the impact of a single feature
                 ),
                 SGDRegressor(
                     loss = "huber",
@@ -245,7 +243,7 @@ class PolynomialRegressor(BaseTabularRegressor):
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "PolySGD"
 
 
@@ -255,7 +253,7 @@ class KNNRegressor(BaseTabularRegressor):
         self,
         df_train: pd.DataFrame, df_test: pd.DataFrame,
         config: ModelConfig,
-        weights: str = "uniform",     # uniform or distance
+        weights: str = "distance",     # uniform or distance
         n_neighbors: int = 5
     ):
         self.n_neighbors = n_neighbors
@@ -266,12 +264,13 @@ class KNNRegressor(BaseTabularRegressor):
     def build_model(self):
         return KNeighborsRegressor(
                 n_neighbors = self.n_neighbors,
-                weights = self.weights
+                weights = self.weights,
+                algorithm = "auto"
             )
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "KNNRegressor"
 
 
@@ -281,7 +280,7 @@ class SVMRegressor(BaseTabularRegressor):
         self,
         df_train: pd.DataFrame, df_test: pd.DataFrame,
         config: ModelConfig,
-        epsilon = 1.35, alpha = 1e-4, 
+        epsilon = 0.2, alpha = 1e-4,
         max_iter = 5000, tol = 1e-4,
     ):
         self.epsilon = epsilon
@@ -299,12 +298,14 @@ class SVMRegressor(BaseTabularRegressor):
                 alpha = self.alpha,
                 max_iter = self.max_iter,
                 tol = self.tol,
+                penalty = "l2",
+                learning_rate = "optimal",
                 random_state = self.config.seed,
             )
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "SVMRegressor"
 
 
@@ -335,7 +336,7 @@ class DTRegressor(BaseTabularRegressor):
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "DTRegressor"
 
 
@@ -368,12 +369,13 @@ class RFRegressor(BaseTabularRegressor):
                 min_samples_split = self.min_samples_split,
                 max_features = self.max_features,
                 max_samples = self.max_samples,
+                bootstrap = True,
                 n_jobs = self.n_jobs
             )
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "RFRegressor"
 
 
@@ -415,7 +417,7 @@ class GBRegressor(BaseTabularRegressor):
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "GBRegressor"
 
 
@@ -456,7 +458,7 @@ class ABRegressor(BaseTabularRegressor):
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "ABRegressor"
 
 
@@ -502,7 +504,7 @@ class XGBRegressor(BaseTabularRegressor):
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "XGBRegressor"
 
 
@@ -558,7 +560,7 @@ class LightGBMRegressor(BaseTabularRegressor):
 
 
     def optim_model_name(self) -> Optional[str]:
-            # Must match your OptunaTuner registry key
+            # Must match the OptunaTuner registry key
             return "LightGBMRegressor"
 
 
@@ -678,6 +680,7 @@ class DeepTabularRegressor(BaseTabularRegressor):
         epochs: int = 100,
         batch_size: int = 2048,
         seed: int = 42,
+        optim_present: bool = False
     ):
         self.device = pick_device()
         self.epochs = epochs
@@ -688,9 +691,11 @@ class DeepTabularRegressor(BaseTabularRegressor):
 
         self.num_feat = self.X_train.shape[1]
         self.criterion = nn.MSELoss()
-        self.optimizer = optim.Adam(self.model.parameters(),
-                               lr = self.lr,
-                               weight_decay = self.weight_decay
+
+        if not optim_present:
+            self.optimizer = optim.Adam(self.model.parameters(),
+                                lr = self.lr,
+                                weight_decay = self.weight_decay
                             )
 
         if df_test is not None:
@@ -872,6 +877,8 @@ class DeepTabularRegressor(BaseTabularRegressor):
 
 # ===================== DEEP LEARNING MODELS (Models implementation) ==============================
 
+
+# ===================== RealMLP ==============================
 class RealMLPRegressor(BaseTabularRegressor):
     def __init__(
         self,
@@ -913,11 +920,13 @@ class RealMLPRegressor(BaseTabularRegressor):
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "RealMLPRegressor"
+# ===================== RealMLP ==============================
 
 
 
+# ===================== ResNet Regressor ==============================
 class ResBlock(nn.Module):
     def __init__(
         self,
@@ -1081,5 +1090,51 @@ class ResnetRegressor(DeepTabularRegressor):
 
 
     def optim_model_name(self) -> Optional[str]:
-        # Must match your OptunaTuner registry key
+        # Must match the OptunaTuner registry key
         return "ResnetRegressor"
+# ===================== ResNet Regressor ==============================
+
+
+
+# ===================== FT-Transformer Regressor ==============================
+class FTTransformerRegressor(DeepTabularRegressor):
+    def __init__(
+        self,
+        df_train: pd.DataFrame, df_test: pd.DataFrame,
+        config: ModelConfig,
+        d_in: int, n_blocks: int = 3,
+        epochs = 100, batch_size = 2048, seed = 42
+    ):
+        super().__init__(df_train, df_test, config, epochs, batch_size, seed, True)
+        self.optimizer = self.model.make_default_optimizer()
+        self.d_in = d_in
+        self.n_blocks = n_blocks
+
+        self.param_dict = {
+            "df_train": df_train, "df_test": df_test,
+            "config": config,
+
+            "d_in": d_in,
+            "n_blocks": n_blocks,
+        }
+
+
+    def build_model(self):
+        kwargs = FTTransformer.get_default_kwargs(n_blocks = self.n_blocks)
+        kwargs["d_out"] = 1
+        model = FTTransformer(
+            n_cont_features = self.d_in,
+            cat_cardinalities = [],
+            _is_default = True,
+            **kwargs
+        )
+        return model
+
+
+    def get_params(self):
+        return self.param_dict
+
+
+    def optim_model_name(self) -> Optional[str]:
+        # Must match the OptunaTuner registry key
+        return "FTTransformerRegressor"

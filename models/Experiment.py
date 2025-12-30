@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import pandas as pd
-import torch
 
 import json
 from tqdm.notebook import tqdm
@@ -15,7 +14,7 @@ from sklearn.preprocessing import StandardScaler
 from Models import ModelConfig, \
     LinearRegressor, PolynomialRegressor, KNNRegressor, SVMRegressor, \
     DTRegressor, RFRegressor, GBRegressor, ABRegressor, XGBRegressor, LightGBMRegressor, \
-    RealMLPRegressor, ResnetRegressor
+    RealMLPRegressor, ResnetRegressor, FTTransformerRegressor
 
 import logging
 
@@ -44,6 +43,7 @@ MODEL_REGISTRY = {
     "LightGBMRegressor": LightGBMRegressor,
     "RealMLPRegressor": RealMLPRegressor,
     "ResnetRegressor": ResnetRegressor,
+    "FTTransformerRegressor": FTTransformerRegressor
 }
 
 DATASET_LIST = [

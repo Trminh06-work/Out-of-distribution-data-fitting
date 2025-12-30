@@ -1,13 +1,6 @@
-import os, tempfile
-from contextlib import contextmanager
-import copy
-
 import pandas as pd
 import seaborn as sns
 import numpy as np
-import torch
-import torch.nn as nn
-import torch.optim as optim
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
@@ -20,14 +13,13 @@ from sklearn.model_selection import KFold
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 from sklearn.linear_model import SGDRegressor
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, AdaBoostRegressor
 import xgboost as xgb
 from lightgbm import LGBMRegressor
 
 from pytabkit import RealMLP_TD_Regressor
-from Models import ResNet, ResnetRegressor, pick_device, ModelConfig
+from Models import ResNet, ResnetRegressor, FTTransformerRegressor, pick_device, ModelConfig
 
 import logging
 
@@ -122,6 +114,11 @@ class ModelSketcher:
                 df_train = pd.concat([X_b, y_b], axis = 1)
                 param_dict["df_train"] = df_train
                 return ResnetRegressor(**param_dict)
+            elif isinstance(self.model, FTTransformerRegressor):
+                param_dict = self.model.get_params()
+                df_train = pd.concat([X_b, y_b], axis = 1)
+                param_dict["df_train"] = df_train
+                return FTTransformerRegressor(**param_dict)
             else:
                 return clone(self.model)
 
@@ -274,6 +271,7 @@ def huber_sgd_space(trial):
 
 def huber_sgd_build(params, seed):
     return SGDRegressor(loss="huber", random_state = seed, **params)
+
 
 # Polynomial Regression with Huber loss + L1-Regularization using ElasticNet
 def poly_sgd_space(trial):
@@ -562,6 +560,23 @@ def resnet_reg_build(params, seed):
     return ResnetRegressor(random_state = seed, **params)
 
 
+# FT-Transformer Regressor
+def ft_transformer_reg_space(trial):
+    # The original code just allows to modify n_blocks in [1, 6]
+    return {
+        "df_train": None,
+        "df_test": None,
+        "d_in": None,
+        "config": ModelConfig(use_optim = False),
+        "n_blocks": trial.suggest_int("n_blocks", 1, 6),
+    }
+
+
+def ft_transformer_reg_build(params, seed):
+    return FTTransformerRegressor(**params)
+
+
+
 # Optuna Tuner setup
 SearchSpaceFn = Callable[[optuna.trial.Trial], Dict[str, Any]]
 BuildModelFn = Callable[[Dict[str, Any], int, int], BaseEstimator]
@@ -589,10 +604,7 @@ class OptunaTuner:
     ):
         self.registry = {
             "HuberSGD": ModelSpec(build = huber_sgd_build, space = huber_sgd_space),
-            "PolySGD": ModelSpec(
-                build = poly_sgd_build,
-                space = poly_sgd_space
-            ),
+            "PolySGD": ModelSpec(build = poly_sgd_build, space = poly_sgd_space),
             "KNNRegressor": ModelSpec(build = knn_reg_build, space = knn_reg_space),
             "SVMRegressor": ModelSpec(build = svm_reg_build, space = svm_reg_space),
             "DTRegressor": ModelSpec(build = dt_reg_build, space = dt_reg_space),
@@ -603,6 +615,7 @@ class OptunaTuner:
             "LightGBMRegressor": ModelSpec(build = lightgbm_reg_build, space = lightgbm_reg_space),
             "RealMLPRegressor": ModelSpec(build = realmlp_reg_build, space = realmlp_reg_space),
             "ResnetRegressor": ModelSpec(build = resnet_reg_build, space = resnet_reg_space),
+            "FTTransformerRegressor": ModelSpec(build = ft_transformer_reg_build, space = ft_transformer_reg_space)
         }
         self.metric = metric
         self.n_splits = n_splits
@@ -649,7 +662,7 @@ class OptunaTuner:
                 X_train, y_train = X.iloc[train_idx], y.iloc[train_idx]
                 X_val, y_val = X.iloc[val_idx], y.iloc[val_idx]
 
-                if model_name == "ResnetRegressor":
+                if model_name in ["ResnetRegressor", "FTTransformerRegressor"]:
                     params["df_train"] = pd.concat([X_train, y_train], axis = 1)
                     params["df_test"] = pd.concat([X_val, y_val], axis = 1)
                     params["d_in"] = X_train.shape[1]
