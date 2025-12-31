@@ -628,6 +628,21 @@ class FTTransformer(nn.Module):
         )
         self._is_default = _is_default
 
+        self.d_in = n_cont_features # assume no categorical features
+        self.n_blocks = backbone_kwargs["n_blocks"]
+
+        from Models import ModelConfig
+        self.config = ModelConfig
+
+
+    def get_params(self):
+        return {
+            "df_train": None, "df_test": None, "config": self.config,
+            "d_in": self.d_in,
+            "n_blocks": self.n_blocks
+        }
+
+
     @classmethod
     def get_default_kwargs(cls, n_blocks: int = 3) -> Dict[str, Any]:
         """Get the default hyperparameters.
@@ -717,7 +732,7 @@ class FTTransformer(nn.Module):
         'Based on the arguments passed to the constructor of FTTransformer, {}'
     )
 
-    def forward(self, x_cont: Optional[Tensor], x_cat: Optional[Tensor]) -> Tensor:
+    def forward(self, x_cont: Optional[Tensor], x_cat: Optional[Tensor] = None) -> Tensor:
         """Do the forward pass."""
         x_any = x_cat if x_cont is None else x_cont
         if x_any is None:

@@ -84,7 +84,7 @@ class DataSaver:
         try:
             with open(out_file, "w") as f:
                 json.dump(results, f, indent = 2, default = self._to_python)
-            tqdm.write(f"Successfully saved → {out_file}")
+            # tqdm.write(f"Successfully saved → {out_file}")
         except:
             tqdm.write(f"Error: Cannot save file")
 
@@ -104,10 +104,12 @@ class EvaluateModel:
         if self.model_name in list(MODEL_REGISTRY.keys())[-3:]:
             config.use_optim = False
 
-        if self.model_class is not ResnetRegressor:
-            regressor = self.model_class(df_train, df_test, config)
-        else:
+        if self.model_class is ResnetRegressor:
             regressor = ResnetRegressor(df_train, df_test, config, d_in = df_train.shape[1] - 1)
+        elif self.model_class is FTTransformerRegressor:
+            regressor = FTTransformerRegressor(df_train, df_test, config, d_in = df_train.shape[1] - 1, n_blocks = 4)
+        else:
+            regressor = self.model_class(df_train, df_test, config)
 
         regressor.fit()
         result = regressor.evaluate()

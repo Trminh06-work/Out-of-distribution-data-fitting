@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, mean_absolute_percentage_error
 from sklearn.pipeline import make_pipeline
 from sklearn.base import clone, BaseEstimator
 from sklearn.model_selection import KFold
@@ -19,6 +19,7 @@ import xgboost as xgb
 from lightgbm import LGBMRegressor
 
 from pytabkit import RealMLP_TD_Regressor
+from ft_transformer import FTTransformer
 from Models import ResNet, ResnetRegressor, FTTransformerRegressor, pick_device, ModelConfig
 
 import logging
@@ -74,6 +75,22 @@ class Evaluator:
         return r2
 
 
+    def score_MAPE(self):
+        mape = mean_absolute_percentage_error(self.y_true, self.y_pred)
+        return mape
+
+
+    def score_sMAPE(self):
+        y_true = np.asarray(self.y_true, dtype=float).ravel()
+        y_pred = np.asarray(self.y_pred, dtype=float).ravel()
+
+        epsilon = 1e-4 # avoid zero division
+        denom = np.abs(y_true) + np.abs(y_pred) + epsilon
+        num = np.abs(y_true - y_pred)
+        sMAPE = 200.0 * np.mean(num / denom)
+
+        return sMAPE
+
 
 class ModelSketcher:
     def __init__(self, model):
@@ -114,7 +131,7 @@ class ModelSketcher:
                 df_train = pd.concat([X_b, y_b], axis = 1)
                 param_dict["df_train"] = df_train
                 return ResnetRegressor(**param_dict)
-            elif isinstance(self.model, FTTransformerRegressor):
+            elif isinstance(self.model, FTTransformer):
                 param_dict = self.model.get_params()
                 df_train = pd.concat([X_b, y_b], axis = 1)
                 param_dict["df_train"] = df_train

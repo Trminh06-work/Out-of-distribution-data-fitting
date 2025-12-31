@@ -45,7 +45,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class ModelConfig:
-    use_optim: bool = True
+    use_optim: bool = False
     metric: str = "rmse"
     n_splits: int = 5
     seed: int = 42
@@ -81,7 +81,6 @@ class BaseTabularRegressor(ABC):
             self.y_test = df_test.iloc[:, -1]
 
         self.model: BaseEstimator = self.build_model()
-
         if self.config.use_optim:
             self.model = self._run_optimization()
 
@@ -108,7 +107,6 @@ class BaseTabularRegressor(ABC):
             raise ValueError(
                 f"{self.__class__.__name__} has use_optim = True but optim_model_name() returned None."
             )
-
         optimizer = OptunaTuner(
             metric = self.config.metric,
             n_splits = self.config.n_splits,
@@ -145,6 +143,8 @@ class BaseTabularRegressor(ABC):
             "Adjusted R2 score": evaluator.score_r2(
                 use_adjusted=True, num_feat=self.X_train.shape[1]
             ),
+            "MAPE": evaluator.score_MAPE(),
+            "sMAPE": evaluator.score_sMAPE()
         }
 
 
@@ -786,6 +786,7 @@ class DeepTabularRegressor(BaseTabularRegressor):
             train_loss /= len(self.train_loader)
             train_losses.append(train_loss)
 
+
             train_target_t = torch.cat(train_target, dim=0)
             train_predict_t = torch.cat(train_predict, dim=0)
             train_adjusted_r2.append(self._score_r2(
@@ -837,11 +838,11 @@ class DeepTabularRegressor(BaseTabularRegressor):
         self.model.eval()
         if X_test_input is None:
             X_test = getattr(self, "X_test_tensor", None)
-            y_pred = self.model(X_test).detach().cpu().numpy()
+            y_pred = self.model(X_test).detach().cpu().numpy().reshape(-1)
             return pd.Series(y_pred, index = self.y_test.index, name = "y_pred")
         else:
             X_test = self._to_tensor(X_test_input)
-            y_pred = self.model(X_test).detach().cpu().numpy()
+            y_pred = self.model(X_test).detach().cpu().numpy().reshape(-1)
             return y_pred
 
 
@@ -1105,11 +1106,8 @@ class FTTransformerRegressor(DeepTabularRegressor):
         d_in: int, n_blocks: int = 3,
         epochs = 100, batch_size = 2048, seed = 42
     ):
-        super().__init__(df_train, df_test, config, epochs, batch_size, seed, True)
-        self.optimizer = self.model.make_default_optimizer()
         self.d_in = d_in
         self.n_blocks = n_blocks
-
         self.param_dict = {
             "df_train": df_train, "df_test": df_test,
             "config": config,
@@ -1117,6 +1115,8 @@ class FTTransformerRegressor(DeepTabularRegressor):
             "d_in": d_in,
             "n_blocks": n_blocks,
         }
+        super().__init__(df_train, df_test, config, epochs, batch_size, seed, True)
+        self.optimizer = self.model.make_default_optimizer()
 
 
     def build_model(self):
@@ -1125,7 +1125,6 @@ class FTTransformerRegressor(DeepTabularRegressor):
         model = FTTransformer(
             n_cont_features = self.d_in,
             cat_cardinalities = [],
-            _is_default = True,
             **kwargs
         )
         return model
