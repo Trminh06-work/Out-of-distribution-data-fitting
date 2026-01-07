@@ -404,16 +404,16 @@ class GBRegressor(BaseTabularRegressor):
 
     def build_model(self):
         return GradientBoostingRegressor(
-                random_state = self.config.seed,
-                n_estimators = self.n_estimators,
-                learning_rate = self.learning_rate,
-                max_depth = self.max_depth,
-                subsample = self.subsample,
-                min_samples_leaf = self.min_samples_leaf,
-                min_samples_split = self.min_samples_split,
-                max_features = self.max_features,
-                tol = self.tol,
-            )
+            random_state = self.config.seed,
+            n_estimators = self.n_estimators,
+            learning_rate = self.learning_rate,
+            max_depth = self.max_depth,
+            subsample = self.subsample,
+            min_samples_leaf = self.min_samples_leaf,
+            min_samples_split = self.min_samples_split,
+            max_features = self.max_features,
+            tol = self.tol,
+        )
 
 
     def optim_model_name(self) -> Optional[str]:
