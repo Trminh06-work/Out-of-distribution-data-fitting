@@ -362,16 +362,16 @@ class RFRegressor(BaseTabularRegressor):
 
     def build_model(self):
         return RandomForestRegressor(
-                random_state = self.config.seed,
-                n_estimators = self.n_estimators,
-                max_depth = self.max_depth,
-                min_samples_leaf = self.min_samples_leaf,
-                min_samples_split = self.min_samples_split,
-                max_features = self.max_features,
-                max_samples = self.max_samples,
-                bootstrap = True,
-                n_jobs = self.n_jobs
-            )
+            random_state = self.config.seed,
+            n_estimators = self.n_estimators,
+            max_depth = self.max_depth,
+            min_samples_leaf = self.min_samples_leaf,
+            min_samples_split = self.min_samples_split,
+            max_features = self.max_features,
+            max_samples = self.max_samples,
+            bootstrap = True,
+            n_jobs = self.n_jobs
+        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -500,7 +500,7 @@ class XGBRegressor(BaseTabularRegressor):
                 reg_alpha = self.reg_alpha,
                 gamma = self.gamma,
                 max_bin = self.max_bin,
-            ),
+            )
 
 
     def optim_model_name(self) -> Optional[str]:
