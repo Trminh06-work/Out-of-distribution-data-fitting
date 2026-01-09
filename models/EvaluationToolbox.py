@@ -462,8 +462,8 @@ def xgb_reg_space(trial):
         "gamma": trial.suggest_float("gamma", 0.0, 10.0),
 
         # regularization
-        "reg_lambda": trial.suggest_float("reg_lambda", 1e-2, 100.0, log=True),
-        "reg_alpha": trial.suggest_float("reg_alpha", 1e-8, 10.0, log=True),
+        "reg_lambda": trial.suggest_float("reg_lambda", 1e-2, 1.0, log=True),
+        "reg_alpha": trial.suggest_float("reg_alpha", 1e-2, 1.0, log=True),
 
         # subsampling (often improves OOD robustness + reduces compute a bit)
         "subsample": trial.suggest_float("subsample", 0.6, 1.0),
@@ -510,8 +510,8 @@ def lightgbm_reg_space(trial):
         "colsample_bytree": trial.suggest_float("colsample_bytree", 0.6, 1.0),
 
         # L1/L2 regularization
-        "reg_alpha": trial.suggest_float("reg_alpha", 1e-8, 10.0, log=True),
-        "reg_lambda": trial.suggest_float("reg_lambda", 1e-3, 100.0, log=True),
+        "reg_alpha": trial.suggest_float("reg_alpha", 1e-3, 1.0, log=True),
+        "reg_lambda": trial.suggest_float("reg_lambda", 1e-3, 1.0, log=True),
 
         # Histogram bins: big speed lever on CPU
         "max_bin": trial.suggest_categorical("max_bin", [63, 127, 255]),

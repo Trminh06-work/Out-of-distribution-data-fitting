@@ -489,18 +489,18 @@ class XGBRegressor(BaseTabularRegressor):
 
     def build_model(self):
         return xgb.XGBRegressor(
-                random_state = self.config.seed,
-                n_jobs = self.n_jobs,
-                max_depth = self.max_depth,
-                n_estimators = self.n_estimators,
-                learning_rate = self.learning_rate,
-                subsample = self.subsample,
-                colsample_bytree = self.colsample_bytree,
-                reg_lambda = self.reg_lambda,
-                reg_alpha = self.reg_alpha,
-                gamma = self.gamma,
-                max_bin = self.max_bin,
-            )
+            random_state = self.config.seed,
+            n_jobs = self.n_jobs,
+            max_depth = self.max_depth,
+            n_estimators = self.n_estimators,
+            learning_rate = self.learning_rate,
+            subsample = self.subsample,
+            colsample_bytree = self.colsample_bytree,
+            reg_lambda = self.reg_lambda,
+            reg_alpha = self.reg_alpha,
+            gamma = self.gamma,
+            max_bin = self.max_bin,
+        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -543,20 +543,20 @@ class LightGBMRegressor(BaseTabularRegressor):
 
     def build_model(self):
         return LGBMRegressor(
-                verbosity = -1,
-                random_state = self.config.seed,
-                n_jobs = self.n_jobs,
-                max_depth = self.max_depth,
-                n_estimators = self.n_estimators,
-                learning_rate = self.learning_rate,
-                subsample = self.subsample,
-                colsample_bytree = self.colsample_bytree,
-                reg_lambda = self.reg_lambda,
-                reg_alpha = self.reg_alpha,
-                num_leaves = self.num_leaves,
-                min_child_samples = self.min_child_samples,
-                # early_stopping_rounds = self.early_stopping_rounds,
-            )
+            verbosity = -1,
+            random_state = self.config.seed,
+            n_jobs = self.n_jobs,
+            max_depth = self.max_depth,
+            n_estimators = self.n_estimators,
+            learning_rate = self.learning_rate,
+            subsample = self.subsample,
+            colsample_bytree = self.colsample_bytree,
+            reg_lambda = self.reg_lambda,
+            reg_alpha = self.reg_alpha,
+            num_leaves = self.num_leaves,
+            min_child_samples = self.min_child_samples,
+            # early_stopping_rounds = self.early_stopping_rounds,
+        )
 
 
     def optim_model_name(self) -> Optional[str]:
