@@ -92,6 +92,16 @@ class Evaluator:
         return sMAPE
 
 
+    def score_nRMSE(self):
+        rmse = self.score_RMSE()
+        return rmse / self.y_true.std()
+
+
+    def score_nMAE(self):
+        mae = self.score_MAE()
+        return mae / self.y_true.std()
+
+
 class ModelSketcher:
     def __init__(self, model):
         self.model = model
@@ -268,7 +278,7 @@ class ModelSketcher:
             fontsize=16,
             y=0.94   # move title up/down if needed
         )
-        
+
         plt.tight_layout(rect=[0, 0, 0.88, 0.92])
         plt.show()
 
@@ -534,7 +544,7 @@ def realmlp_reg_space(trial):
         # budget
         "device": pick_device(),
         "n_epochs": 64,
-        "batch_size": 512,
+        "batch_size": 1024,
         "predict_batch_size": 4096,
 
         # architecture (rectangular means hidden_width * n_hidden_layers)
@@ -563,13 +573,13 @@ def resnet_reg_space(trial):
         "d": trial.suggest_int("d", 64, 512),
         "n_res_blocks": trial.suggest_int("n_res_blocks", 1, 4),
         "d_out": 1,
-        "d_hidden_factor": trial.suggest_float("d_hidden_factor", 4, 8),
+        "d_hidden_factor": trial.suggest_float("d_hidden_factor", 0, 1),
         "dropout_rate": trial.suggest_float("dropout_rate", 0, 0.5),
         "act_fn": "relu",
         "norm": "batchnorm1d",
         "lr": trial.suggest_float("lr", 1e-5, 1e-2),
         "weight_decay": trial.suggest_float("weight_decay", 1e-6, 1e-3),
-        "batch_size": 512
+        "batch_size": trial.suggest_categorical("batch_size", [128, 256, 512, 1024]),
     }
 
 

@@ -655,10 +655,15 @@ class CreateDataLoader:
     def create(self):
         train_dataset = CustomDataset(self.X_train, self.y_train)
         val_dataset = CustomDataset(self.X_val, self.y_val)
+
+        # Avoid a last mini-batch of size 1 (BatchNorm crashes in train mode)
+        drop_last = (len(train_dataset) > self.batch_size) and (len(train_dataset) % self.batch_size == 1)
+
         train_loader = DataLoader(
             train_dataset,
             batch_size = self.batch_size,
             shuffle = self.is_shuffle,
+            drop_last = drop_last,
             num_workers = 4,
         )
         val_loader = DataLoader(
@@ -757,10 +762,14 @@ class DeepTabularRegressor(BaseTabularRegressor):
             X = self._to_tensor(X)
             y = self._to_tensor(y)
             train_dataset = CustomDataset(X, y)
+
+            # Avoid a last mini-batch of size 1 (BatchNorm crashes in train mode)
+            drop_last = (len(train_dataset) > self.batch_size) and (len(train_dataset) % self.batch_size == 1)
             self.train_loader = DataLoader(
                 train_dataset,
                 batch_size = self.batch_size,
                 shuffle = True,
+                drop_last = drop_last,
                 num_workers = 0,
             )
 
@@ -903,21 +912,21 @@ class RealMLPRegressor(BaseTabularRegressor):
     def build_model(self):
         # Wrap with target scaling to keep loss scale consistent across datasets
         return RealMLP_TD_Regressor(
-                device = pick_device(),
-                random_state = self.config.seed,
-                n_epochs = self.n_epochs,
-                batch_size = self.batch_size,
-                predict_batch_size = self.predict_batch_size,
-                hidden_sizes = "rectangular",
-                n_hidden_layers = self.n_hidden_layers,
-                hidden_width = self.hidden_width,
-                lr = self.lr,
-                wd = self.wd,
-                p_drop = self.p_drop,
-                verbosity = 0,
-                use_plr_embeddings = False, use_parametric_act = False, # for faster training
-                act = "mish" # activation function for regression
-            )
+            device = pick_device(),
+            random_state = self.config.seed,
+            n_epochs = self.n_epochs,
+            batch_size = self.batch_size,
+            predict_batch_size = self.predict_batch_size,
+            hidden_sizes = "rectangular",
+            n_hidden_layers = self.n_hidden_layers,
+            hidden_width = self.hidden_width,
+            lr = self.lr,
+            wd = self.wd,
+            p_drop = self.p_drop,
+            verbosity = 0,
+            use_plr_embeddings = False, use_parametric_act = False, # for faster training
+            act = "mish" # activation function for regression
+        )
 
 
     def optim_model_name(self) -> Optional[str]:
@@ -1048,7 +1057,7 @@ class ResnetRegressor(DeepTabularRegressor):
         random_state: int = 42,
         d_in: int = 1,
         d: int = 512,
-        n_res_blocks: int = 8,
+        n_res_blocks: int = 4,
         d_out: int = 1,
         d_hidden_factor: float = 0.2,
         dropout_rate: float = 0.2,
@@ -1059,7 +1068,7 @@ class ResnetRegressor(DeepTabularRegressor):
         lr: float = 1e-3,
         weight_decay: float = 1e-4,
         epochs: int = 100,
-        batch_size: int = 2048,
+        batch_size: int = 1024,
     ):
         self.param_dict = {
             "df_train": df_train, "df_test": df_test,
@@ -1104,7 +1113,7 @@ class FTTransformerRegressor(DeepTabularRegressor):
         df_train: pd.DataFrame, df_test: pd.DataFrame,
         config: ModelConfig,
         d_in: int, n_blocks: int = 3,
-        epochs = 100, batch_size = 2048, seed = 42
+        epochs = 100, batch_size = 1024, seed = 42
     ):
         self.d_in = d_in
         self.n_blocks = n_blocks
