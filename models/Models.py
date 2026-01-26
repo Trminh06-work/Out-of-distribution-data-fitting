@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, TensorDataset
 
 from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split
@@ -774,9 +774,10 @@ class DeepTabularRegressor(BaseTabularRegressor):
             )
 
         for epoch in range(self.epochs):
-            train_loss = 0.0
-            train_target = []
-            train_predict = []
+            if plot_train_progress:
+                train_loss = 0.0
+                train_target = []
+                train_predict = []
 
             # Training
             self.model.train()
@@ -788,23 +789,22 @@ class DeepTabularRegressor(BaseTabularRegressor):
                 loss.backward()
                 self.optimizer.step()
 
-                train_target.append(y_samples.detach())
-                train_predict.append(y_preds.detach())
-                train_loss += loss.item()
-
-            train_loss /= len(self.train_loader)
-            train_losses.append(train_loss)
-
-
-            train_target_t = torch.cat(train_target, dim=0)
-            train_predict_t = torch.cat(train_predict, dim=0)
-            train_adjusted_r2.append(self._score_r2(
-                y_true=train_target_t, y_pred=train_predict_t,
-                use_adjusted=True, num_feat=self.num_feat
-            ))
+                if plot_train_progress:
+                    train_target.append(y_samples.detach())
+                    train_predict.append(y_preds.detach())
+                    train_loss += loss.item()
 
             # Skip if this is unecessary
             if plot_train_progress:
+                train_loss /= len(self.train_loader)
+                train_losses.append(train_loss)
+
+                train_target_t = torch.cat(train_target, dim=0)
+                train_predict_t = torch.cat(train_predict, dim=0)
+                train_adjusted_r2.append(self._score_r2(
+                    y_true=train_target_t, y_pred=train_predict_t,
+                    use_adjusted=True, num_feat=self.num_feat
+                ))
                 # Evaluation
                 val_loss = 0.0
                 val_target = []
@@ -842,16 +842,33 @@ class DeepTabularRegressor(BaseTabularRegressor):
         return self
 
 
-    @torch.no_grad()
     def predict(self, X_test_input = None) -> pd.Series:
         self.model.eval()
-        if X_test_input is None:
-            X_test = getattr(self, "X_test_tensor", None)
-            y_pred = self.model(X_test).detach().cpu().numpy().reshape(-1)
-            return pd.Series(y_pred, index = self.y_test.index, name = "y_pred")
-        else:
-            X_test = self._to_tensor(X_test_input)
-            y_pred = self.model(X_test).detach().cpu().numpy().reshape(-1)
+        index = None
+        with torch.no_grad():
+            if X_test_input is None:
+                X_test = getattr(self, "X_test_tensor", None)
+                # y_pred = self.model(X_test).detach().cpu().numpy().reshape(-1)
+                index = self.y_test.index
+            else:
+                X_test = self._to_tensor(X_test_input)
+                # y_pred = self.model(X_test).detach().cpu().numpy().reshape(-1)
+                index = None
+
+            # Avoid a last mini-batch of size 1 (BatchNorm crashes in train mode)
+            loader = DataLoader(TensorDataset(X_test), batch_size = self.batch_size, shuffle=False)
+
+            preds = []
+            with torch.no_grad():
+                for (Xb,) in loader:
+                    Xb = Xb.to(self.device)
+                    yb = self.model(Xb).view(-1).detach().cpu()
+                    preds.append(yb)
+
+            y_pred = torch.cat(preds).numpy()
+
+            if index is not None:
+                return pd.Series(y_pred, index=index, name="y_pred")
             return y_pred
 
 
@@ -1113,7 +1130,7 @@ class FTTransformerRegressor(DeepTabularRegressor):
         df_train: pd.DataFrame, df_test: pd.DataFrame,
         config: ModelConfig,
         d_in: int, n_blocks: int = 3,
-        epochs = 100, batch_size = 1024, seed = 42
+        epochs = 20, batch_size = 1024, seed = 42
     ):
         self.d_in = d_in
         self.n_blocks = n_blocks

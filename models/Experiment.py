@@ -46,8 +46,8 @@ MODEL_REGISTRY = {
     "XGBRegressor": XGBRegressor,
     "LightGBMRegressor": LightGBMRegressor,
     "RealMLPRegressor": RealMLPRegressor,
-    # "ResnetRegressor": ResnetRegressor,
-    # "FTTransformerRegressor": FTTransformerRegressor
+    "ResnetRegressor": ResnetRegressor,
+    "FTTransformerRegressor": FTTransformerRegressor
 }
 
 DATASET_LIST = [
@@ -117,7 +117,7 @@ class EvaluateModel:
         if self.model_class is ResnetRegressor:
             regressor = ResnetRegressor(df_train, df_test, config, d_in = df_train.shape[1] - 1)
         elif self.model_class is FTTransformerRegressor:
-            regressor = FTTransformerRegressor(df_train, df_test, config, d_in = df_train.shape[1] - 1, n_blocks = 4)
+            regressor = FTTransformerRegressor(df_train, df_test, config, d_in = df_train.shape[1] - 1, n_blocks = 3)
         else:
             regressor = self.model_class(df_train, df_test, config)
 
@@ -189,7 +189,7 @@ class EvaluateModel:
 class Analysis:
     def __init__(
         self,
-        alpha: float = 0.05,
+        alpha: float = 0.01,
         agg_method: str = "median",   # or mean (less robust)
     ):
         self.alpha = alpha            # significance level
@@ -517,13 +517,47 @@ class Analysis:
             print(f"\n⚠️ Friedman not significant (p≥{self.alpha})")
 
 
+    # -------------------------------
+    # (LaTeX formatting)
+    # -------------------------------
+    def _fmt_rank_latex(self, val: float, tag: str) -> str:
+        """tag in {'best','tie','normal'}."""
+        if tag == "best":
+            return rf"\textcolor{{red}}{{{val:.2f}}}"
+        if tag == "tie":
+            return rf"\textcolor{{blue}}{{{val:.2f}}}"
+        return f"{val:.2f}"
+
+
+    def print_splitwise_meanrank_latex(self, latex_buffer: dict, split_types) -> None:
+        """
+        latex_buffer: {model: {split_type: (rank, tag)}}
+        Prints rows like: Model & 9.15 & ... \\
+        """
+        for model in MODEL_REGISTRY.keys():
+            if model not in latex_buffer:
+                raise ValueError("model does not exist")
+            # Escape underscores for LaTeX
+            model_name = str(model).replace("_", r"\_")
+            row = [model_name]
+            for s in split_types:
+                rank, tag = latex_buffer[model][s]
+                row.append(self._fmt_rank_latex(float(rank), tag))
+            print(" & ".join(row) + r" \\")
+            print()  # blank line between models
+
+
     def split_wise_test(self, long_df: pd.DataFrame = None):
         if long_df is None:
-            long_df = self.construct_full_stats_table(metric = "RMSE")
+            long_df = self.construct_full_stats_table(metric="RMSE")
+
         summary_rows = []
 
+        # buffer to build LaTeX rows at the end
+        latex_buffer = {}  # {model: {split_type: (mean_rank, tag)}}
+
         for split_type in SPLIT_TYPES:
-            print("\n" + "="*90)
+            print("\n" + "=" * 90)
             print(f"SPLIT: {split_type}")
 
             # Step 3: wide matrix for this split
@@ -541,6 +575,10 @@ class Analysis:
             print(mr)
             print("\nCandidate best:", best)
 
+            # NEW: default highlight tags for LaTeX
+            highlight = {m: "normal" for m in mr.index}
+            highlight[best] = "best"
+
             # Step 6: post-hoc
             if p_friedman < self.alpha and wide.shape[1] > 1:
                 post = self.posthoc_vs_best(wide, best)
@@ -548,6 +586,12 @@ class Analysis:
                 print(post.to_string(index=False))
 
                 top_group = [best] + post.loc[post["p_holm"] >= self.alpha, "compare_to"].tolist()
+
+                # mark ties (incl best) in blue, best in red
+                for m in top_group:
+                    highlight[m] = "tie"
+                highlight[best] = "best"
+
                 if len(top_group) == 1:
                     conclusion = f"BEST: {best}"
                     print(f"\n✅ Best model under split '{split_type}': {best}")
@@ -559,6 +603,11 @@ class Analysis:
                 conclusion = "NO_SIG_DIFF"
                 print(f"\n⚠️ No significant overall difference under split '{split_type}' (or only 1 model).")
 
+            # store mean ranks + highlight tags for LaTeX export
+            for model, rank in mr.items():
+                latex_buffer.setdefault(model, {})
+                latex_buffer[model][split_type] = (float(rank), highlight[model])
+
             summary_rows.append({
                 "split": split_type,
                 "datasets_used": wide.shape[0],
@@ -569,9 +618,13 @@ class Analysis:
             })
 
         summary = pd.DataFrame(summary_rows).sort_values("split")
-        print("\n" + "#"*90)
+        print("\n" + "#" * 90)
         print("SPLIT-WISE SUMMARY")
         print(summary.to_string(index=False))
 
+        # print LaTeX rows in your requested style
+        print("\n" + "#" * 90)
+        print("LATEX ROWS (mean ranks per split; red=best, blue=tied-with-best)\n")
+        self.print_splitwise_meanrank_latex(latex_buffer, SPLIT_TYPES)
 
 
