@@ -200,6 +200,13 @@ class GeometricSplit:
             path = os.path.join(output_dir, f"test_{idx}.parquet")
             df_test.to_parquet(path, index = False)
 
+            # This is to compare different ways of choosing train and test sets (Additional experiment)
+            # Delete for the correct version of the experiment
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)
+
 
     def multiple_hyperballs(self, num_balls):
         """
@@ -257,6 +264,13 @@ class GeometricSplit:
             path = os.path.join(output_dir, f"test_{idx}.parquet")
             df_test.to_parquet(path, index = False)
 
+            # This is to compare different ways of choosing train and test sets (Additional experiment)
+            # Delete for the correct version of the experiment
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)
+
 
     def single_slab(self):
         """
@@ -299,6 +313,13 @@ class GeometricSplit:
             path = os.path.join(output_dir, f"test_{idx}.parquet")
             df_test.to_parquet(path, index = False)
 
+            # This is to compare different ways of choosing train and test sets (Additional experiment)
+            # Delete for the correct version of the experiment
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)
+
 
     def semi_infinite_slab(self):
         """
@@ -314,7 +335,7 @@ class GeometricSplit:
             np.random.seed(SEED)
             normal_vec, lo, high = self._find_bounds(SEED)
             epsilon = 0.01
-            cur_proportion = 0            
+            cur_proportion = 0
 
             # According to the lower and upperbounds, this function leverages "binary search" to find a point which lies in the hyperplane that
             # can split the dataset into two sets that satisfies the given size requirements. The termination condition is when the testing set's size
@@ -322,22 +343,19 @@ class GeometricSplit:
             while cur_proportion < self.test_size or cur_proportion > self.test_size + epsilon:
                 point = lo + (high - lo) / 2
 
-                X_mid = self._data_one_side(normal_vec, np.dot(normal_vec, point))
-
                 b = np.dot(normal_vec, point)
                 X_test = self._data_one_side(normal_vec, b)
-                
+
                 cur_proportion = self._compute_proportion(X_test)
                 if cur_proportion < self.test_size:
                   lo = point + epsilon
                 else:
                   high = point - epsilon
 
-                b = np.dot(normal_vec, point)
-                X_test = self._data_one_side(normal_vec, b)
-                
+                if cur_proportion == self._compute_proportion(X_test):
+                    break
                 cur_proportion = self._compute_proportion(X_test)
-            
+
             y_test = self.y.iloc[X_test.index]
             X_train = self.X.drop(X_test.index)
             y_train = self.y.iloc[X_train.index]
@@ -350,7 +368,14 @@ class GeometricSplit:
             df_train.to_parquet(path, index = False)
             path = os.path.join(output_dir, f"test_{idx}.parquet")
             df_test.to_parquet(path, index = False)
-            
+
+            # This is to compare different ways of choosing train and test sets (Additional experiment)
+            # Delete for the correct version of the experiment
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)
+
 
     def kmeans_hyperballs(self, n_clusters):
         """
@@ -404,6 +429,11 @@ class GeometricSplit:
             df_train.to_parquet(path, index = False)
             path = os.path.join(output_dir, f"test_{idx}.parquet")
             df_test.to_parquet(path, index = False)
-            
-    
-        
+
+
+            # This is to compare different ways of choosing train and test sets (Additional experiment)
+            # Delete for the correct version of the experiment
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)

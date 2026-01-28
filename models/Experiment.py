@@ -64,6 +64,15 @@ SPLIT_TYPES = [
 ]
 
 
+# Turn off/ Remove this list for the correct version of experiment
+# This list is used to compare different ways to split data geometrically
+SPLIT_TYPES = [
+    "Single_Hyperball", "Multiple_Hyperballs", "KMeans_Hyperballs",
+    "Single_Slab", "Semi_Infinite_Slab"
+]
+
+
+
 
 class DataSaver:
     def __init__(self, model_name):
@@ -134,7 +143,7 @@ class EvaluateModel:
         for file_name in tqdm(ds_lst, desc = "Dataset processing"):
             results = defaultdict(dict)
 
-            save_dir = os.path.join("Results/", self.model_name)
+            save_dir = os.path.join("Results_add/", self.model_name)
             os.makedirs(save_dir, exist_ok=True)
             out_file = os.path.join(save_dir, f"{file_name}.json")
 
