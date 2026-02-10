@@ -215,11 +215,67 @@ class Analysis:
             raise ValueError("agg_method must be 'median' or 'mean'")
 
 
-    def compute_ds_std(self, file):
-        df = pd.read_parquet(file)
+    def compute_ds_std(self, train_file):
+        df_train = pd.read_parquet(train_file)
 
-        target = df.iloc[:, -1]
+        target = df_train.iloc[:, -1]
         return float(np.std(target, ddof = 0))
+
+
+    # ---------- helpers ----------
+    def adaptive_format(self, x):
+        """No trailing zeros + magnitude-based precision."""
+        if pd.isna(x):
+            return "--"
+        if x < 10:
+            return f"{x:.2f}".rstrip("0").rstrip(".")
+        elif x < 100:
+            return f"{x:.1f}".rstrip("0").rstrip(".")
+        else:
+            return f"{int(round(x))}"
+
+
+    def colorize_cell(self, cell_txt: str, is_row_best: bool, is_col_best: bool) -> str:
+        if cell_txt == "--":
+            return cell_txt
+        if is_row_best and is_col_best:
+            return f"\\textcolor{{green}}{{{cell_txt}}}"
+        elif is_row_best:
+            return f"\\textcolor{{blue}}{{{cell_txt}}}"
+        elif is_col_best:
+            return f"\\textcolor{{red}}{{{cell_txt}}}"
+        else:
+            return cell_txt
+
+
+    def build_wide_numeric(self, metric: str, data_loader: DataSaver, save_dir: str, model_name: str) -> pd.DataFrame:
+        records = []
+        for ds_name in tqdm(DATASET_LIST, desc=f"Processing {model_name} ({metric})"):
+            file_name = os.path.join(save_dir, f"{ds_name}.json")
+            if not os.path.exists(file_name):
+                continue
+
+            res_dict = data_loader.read_json(file_name)
+            split_scores = self.split_score_by_dict(res_dict, metric, ds_name)
+
+            for split_type, score in split_scores.items():
+                # keep your sMAPE scaling convention
+                if metric == "sMAPE" and score is not None:
+                    score = score / 100.0
+                records.append({"dataset": ds_name, "split": split_type, "score": score})
+
+        long_df = pd.DataFrame(records)
+        if long_df.empty:
+            raise ValueError(f"No data loaded for model={model_name}, metric={metric}.")
+
+        wide = long_df.pivot_table(
+            index="dataset",
+            columns="split",
+            values="score",
+            aggfunc="first"
+        ).reindex(index=DATASET_LIST, columns=SPLIT_TYPES)
+
+        return wide
 
 
     def performance_table(self, model_name):
@@ -232,71 +288,10 @@ class Analysis:
         if not os.path.exists(save_dir):
             raise FileExistsError(f"The file path {save_dir} does not exist")
 
-        # ---------- helpers ----------
-        def adaptive_format(x):
-            """No trailing zeros + magnitude-based precision."""
-            if pd.isna(x):
-                return "--"
-            if x < 10:
-                return f"{x:.2f}".rstrip("0").rstrip(".")
-            elif x < 100:
-                return f"{x:.1f}".rstrip("0").rstrip(".")
-            else:
-                return f"{int(round(x))}"
-
-
-        def colorize_cell(cell_txt: str, is_row_best: bool, is_col_best: bool) -> str:
-            """
-            Color the WHOLE cell based only on RMSE minima:
-            - blue  : best for dataset (row-wise)
-            - red   : best for split (column-wise)
-            - green : best for both
-            """
-            if cell_txt == "--":
-                return cell_txt
-            if is_row_best and is_col_best:
-                return f"\\textcolor{{green}}{{{cell_txt}}}"
-            elif is_row_best:
-                return f"\\textcolor{{blue}}{{{cell_txt}}}"
-            elif is_col_best:
-                return f"\\textcolor{{red}}{{{cell_txt}}}"
-            else:
-                return cell_txt
-
-
-        def build_wide_numeric(metric: str) -> pd.DataFrame:
-            records = []
-            for ds_name in tqdm(DATASET_LIST, desc=f"Processing {model_name} ({metric})"):
-                file_name = os.path.join(save_dir, f"{ds_name}.json")
-                if not os.path.exists(file_name):
-                    continue
-
-                res_dict = data_loader.read_json(file_name)
-                split_scores = self.split_score_by_dict(res_dict, metric, ds_name)
-
-                for split_type, score in split_scores.items():
-                    # keep your sMAPE scaling convention
-                    if metric == "sMAPE" and score is not None:
-                        score = score / 100.0
-                    records.append({"dataset": ds_name, "split": split_type, "score": score})
-
-            long_df = pd.DataFrame(records)
-            if long_df.empty:
-                raise ValueError(f"No data loaded for model={model_name}, metric={metric}.")
-
-            wide = long_df.pivot_table(
-                index="dataset",
-                columns="split",
-                values="score",
-                aggfunc="first"
-            ).reindex(index=DATASET_LIST, columns=SPLIT_TYPES)
-
-            return wide
-
         # ---------- numeric tables ----------
-        rmse_num = build_wide_numeric("RMSE")   # nRMSE
-        mae_num  = build_wide_numeric("MAE")    # nMAE
-        smape_num = build_wide_numeric("sMAPE") # sMAPE (scaled)
+        rmse_num = self.build_wide_numeric("RMSE", data_loader, save_dir, model_name)   # nRMSE
+        mae_num  = self.build_wide_numeric("MAE", data_loader, save_dir, model_name)    # nMAE
+        smape_num = self.build_wide_numeric("sMAPE", data_loader, save_dir, model_name) # sMAPE (scaled)
 
         # ---------- RMSE-based minima for coloring ----------
         rmse_row_min = rmse_num.min(axis=1, skipna=True)  # best split per dataset
@@ -313,9 +308,9 @@ class Analysis:
                 s = smape_num.loc[ds, split]
 
                 # If any metric missing, show "-- / -- / --" (still color by RMSE if RMSE exists)
-                r_txt = adaptive_format(r)
-                m_txt = adaptive_format(m)
-                s_txt = adaptive_format(s)
+                r_txt = self.adaptive_format(r)
+                m_txt = self.adaptive_format(m)
+                s_txt = self.adaptive_format(s)
 
                 cell_plain = f"{r_txt} / {m_txt} / {s_txt}"
 
@@ -323,7 +318,56 @@ class Analysis:
                 is_row_best = (r_txt != "--") and (r == rmse_row_min.loc[ds])
                 is_col_best = (r_txt != "--") and (r == rmse_col_min.loc[split])
 
-                cell_colored = colorize_cell(cell_plain, is_row_best, is_col_best)
+                cell_colored = self.colorize_cell(cell_plain, is_row_best, is_col_best)
+
+                row_cells.append(f"${cell_colored}$")
+
+            latex_rows.append(" & ".join(row_cells) + " \\\\")
+        print("\n\n".join(latex_rows))
+
+
+    def side_exp_performance_table(self, model_name):
+        if model_name not in MODEL_REGISTRY.keys():
+            raise ValueError(f"model_name not exist. Must be {MODEL_REGISTRY.keys()}")
+
+        save_dir = os.path.join("Results/", model_name)
+        data_loader = DataSaver(model_name)
+
+        if not os.path.exists(save_dir):
+            raise FileExistsError(f"The file path {save_dir} does not exist")
+
+        # ---------- baseline numeric tables ----------
+        save_dir = os.path.join("Results/", model_name)
+        base_rmse_num = self.build_wide_numeric("RMSE", data_loader, save_dir, model_name)   # nRMSE
+
+        # ---------- side experiment numeric tables ----------
+        save_dir = os.path.join("Results_add/", model_name)
+        rmse_num = self.build_wide_numeric("RMSE", data_loader, save_dir, model_name)   # nRMSE
+        mae_num  = self.build_wide_numeric("MAE", data_loader, save_dir, model_name)    # nMAE
+        smape_num = self.build_wide_numeric("sMAPE", data_loader, save_dir, model_name) # sMAPE (scaled)
+
+        # ---------- generate LaTeX rows: each cell = nRMSE / nMAE / sMAPE, colored ONLY by RMSE ----------
+        latex_rows = []
+        for i, ds in enumerate(rmse_num.index):
+            row_cells = [f"\\#{i+1}\n"]
+
+            for split in rmse_num.columns:
+                r = rmse_num.loc[ds, split]
+                base_r = base_rmse_num.loc[ds, split]
+                m = mae_num.loc[ds, split]
+                s = smape_num.loc[ds, split]
+
+                # If any metric missing, show "-- / -- / --" (still color by RMSE if RMSE exists)
+                r_txt = self.adaptive_format(r)
+                m_txt = self.adaptive_format(m)
+                s_txt = self.adaptive_format(s)
+
+                cell_plain = f"{r_txt} / {m_txt} / {s_txt}"
+
+                # RMSE-only coloring decision
+                cell_colored = f"\\textcolor{{ForestGreen}}{{{cell_plain}}}" if r > base_r else f"\\textcolor{{BrickRed}}{{{cell_plain}}}"
+                if r == base_r:
+                    cell_colored = f"\\textcolor{{black}}{{{cell_plain}}}"
 
                 row_cells.append(f"${cell_colored}$")
 
@@ -344,8 +388,8 @@ class Analysis:
             vals = []
             for run_idx, metrics_dict in runs.items():
                 if metric in metrics_dict and metrics_dict[metric] is not None:
-                    file = os.path.join("../data/splitted", ds_name, split_type, f"train_{run_idx}.parquet")
-                    ds_std = self.compute_ds_std(file)
+                    train_file = os.path.join("../data/splitted", ds_name, split_type, f"train_{run_idx}.parquet")
+                    ds_std = self.compute_ds_std(train_file)
 
                     if metric not in ["RMSE", "MAE"]:
                         ds_std = 1
@@ -358,12 +402,13 @@ class Analysis:
 
     def construct_full_stats_table(
         self,
+        dir_path = "Results/",
         metric = "RMSE" # or "MAE", None -> ds_std = 1
     ):
         records = []
 
         for model_name in tqdm(MODEL_REGISTRY.keys(), desc = f"Processing: "):
-            save_dir = os.path.join("Results/", model_name)
+            save_dir = os.path.join(dir_path, model_name)
             data_loader = DataSaver(model_name)
 
             if not os.path.exists(save_dir):
@@ -635,5 +680,4 @@ class Analysis:
         print("\n" + "#" * 90)
         print("LATEX ROWS (mean ranks per split; red=best, blue=tied-with-best)\n")
         self.print_splitwise_meanrank_latex(latex_buffer, SPLIT_TYPES)
-
 
