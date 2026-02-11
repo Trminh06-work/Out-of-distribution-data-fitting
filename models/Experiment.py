@@ -219,7 +219,7 @@ class Analysis:
         df_train = pd.read_parquet(train_file)
 
         target = df_train.iloc[:, -1]
-        return float(np.std(target, ddof = 0))
+        return float(np.std(target, ddof = 0) + 0.0001) # avoid division by zero
 
 
     # ---------- helpers ----------
@@ -363,11 +363,11 @@ class Analysis:
                 s_txt = self.adaptive_format(s)
 
                 diff_percent = int((r - base_r) / base_r * 100)
-                cell_plain = f"{r_txt} / {m_txt} / {s_txt} ({diff_percent}%)"
+                cell_plain = f"{r_txt} / {m_txt} / {s_txt} ({diff_percent}\%)"
 
                 # RMSE-only coloring decision
-                cell_colored = f"\\textcolor{{ForestGreen}}{{{cell_plain}}}" if r > base_r else f"\\textcolor{{BrickRed}}{{{cell_plain}}}"
-                if r == base_r:
+                cell_colored = f"\\textcolor{{ForestGreen}}{{{cell_plain}}}" if diff_percent < 0 else f"\\textcolor{{BrickRed}}{{{cell_plain}}}"
+                if diff_percent == 0:
                     cell_colored = f"\\textcolor{{black}}{{{cell_plain}}}"
 
                 row_cells.append(f"${cell_colored}$")
@@ -391,7 +391,6 @@ class Analysis:
                 if metric in metrics_dict and metrics_dict[metric] is not None:
                     train_file = os.path.join("../data/splitted", ds_name, split_type, f"train_{run_idx}.parquet")
                     ds_std = self.compute_ds_std(train_file)
-
                     if metric not in ["RMSE", "MAE"]:
                         ds_std = 1
 

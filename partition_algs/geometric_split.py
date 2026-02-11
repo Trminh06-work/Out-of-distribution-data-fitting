@@ -195,17 +195,17 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
 
             # Save files using the idx
-            path = os.path.join(output_dir, f"train_{idx}.parquet")
-            df_train.to_parquet(path, index = False)
-            path = os.path.join(output_dir, f"test_{idx}.parquet")
-            df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
             # Delete for the correct version of the experiment
-            # path = os.path.join(output_dir, f"train_{idx}.parquet")
-            # df_test.to_parquet(path, index = False)
-            # path = os.path.join(output_dir, f"test_{idx}.parquet")
-            # df_train.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
 
 
     def multiple_hyperballs(self, num_balls):
@@ -259,17 +259,17 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
 
             # Save files using the idx
-            path = os.path.join(output_dir, f"train_{idx}.parquet")
-            df_train.to_parquet(path, index = False)
-            path = os.path.join(output_dir, f"test_{idx}.parquet")
-            df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
             # Delete for the correct version of the experiment
-            # path = os.path.join(output_dir, f"train_{idx}.parquet")
-            # df_test.to_parquet(path, index = False)
-            # path = os.path.join(output_dir, f"test_{idx}.parquet")
-            # df_train.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
 
 
     def single_slab(self):
@@ -308,17 +308,17 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
     
             # Save files using the idx
-            path = os.path.join(output_dir, f"train_{idx}.parquet")
-            df_train.to_parquet(path, index = False)
-            path = os.path.join(output_dir, f"test_{idx}.parquet")
-            df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
             # Delete for the correct version of the experiment
-            # path = os.path.join(output_dir, f"train_{idx}.parquet")
-            # df_test.to_parquet(path, index = False)
-            # path = os.path.join(output_dir, f"test_{idx}.parquet")
-            # df_train.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
 
 
     def semi_infinite_slab(self):
@@ -364,17 +364,17 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
     
             # Save files using the idx
-            path = os.path.join(output_dir, f"train_{idx}.parquet")
-            df_train.to_parquet(path, index = False)
-            path = os.path.join(output_dir, f"test_{idx}.parquet")
-            df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
             # Delete for the correct version of the experiment
-            # path = os.path.join(output_dir, f"train_{idx}.parquet")
-            # df_test.to_parquet(path, index = False)
-            # path = os.path.join(output_dir, f"test_{idx}.parquet")
-            # df_train.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
 
 
     def kmeans_hyperballs(self, n_clusters):
@@ -425,15 +425,15 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
     
             # Save files using the idx
-            path = os.path.join(output_dir, f"train_{idx}.parquet")
-            df_train.to_parquet(path, index = False)
-            path = os.path.join(output_dir, f"test_{idx}.parquet")
-            df_test.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"train_{idx}.parquet")
+            # df_train.to_parquet(path, index = False)
+            # path = os.path.join(output_dir, f"test_{idx}.parquet")
+            # df_test.to_parquet(path, index = False)
 
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
             # Delete for the correct version of the experiment
-            # path = os.path.join(output_dir, f"train_{idx}.parquet")
-            # df_test.to_parquet(path, index = False)
-            # path = os.path.join(output_dir, f"test_{idx}.parquet")
-            # df_train.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
