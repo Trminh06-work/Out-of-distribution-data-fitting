@@ -362,7 +362,8 @@ class Analysis:
                 m_txt = self.adaptive_format(m)
                 s_txt = self.adaptive_format(s)
 
-                cell_plain = f"{r_txt} / {m_txt} / {s_txt}"
+                diff_percent = int((r - base_r) / base_r * 100)
+                cell_plain = f"{r_txt} / {m_txt} / {s_txt} ({diff_percent}%)"
 
                 # RMSE-only coloring decision
                 cell_colored = f"\\textcolor{{ForestGreen}}{{{cell_plain}}}" if r > base_r else f"\\textcolor{{BrickRed}}{{{cell_plain}}}"
