@@ -220,19 +220,19 @@ class GeometricSplit:
         output_dir = f"../data/splitted/{self.file_name}/Multiple_Hyperballs"
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        
+
         for idx, SEED in enumerate(self.SEEDS):
             # Avoid accidental modification to the original dataset
             X = self.X.copy(deep = True)
             y = self.y.copy(deep = True)
-            
+
             total = X.shape[0]
-            
+
             inclusive_data = set()
-    
+
             np.random.seed(SEED)
             sub_test_sizes = self._random_sums(self.test_size, num_balls)
-            
+
             for sub_test_size in sub_test_sizes:
                 np.random.seed(SEED)
 
@@ -246,7 +246,7 @@ class GeometricSplit:
                 # To address this, we omit the selected data points to guarantee the number of data obtained by each ball.
                 sub_inclusive_data = sub_inclusive_data - inclusive_data
                 X = X.drop(sub_inclusive_data)
-                
+
                 inclusive_data = self._union(inclusive_data, sub_inclusive_data)
 
             index_list = list(inclusive_data)
