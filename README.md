@@ -29,11 +29,25 @@ This repository encompasses code and documents for:
 │   └── Data_Statistics_Summary.ipynb     # Notebook to perform basic EDA and data visualization on raw/*
 │
 ├── partition_algs/
+│   ├── random_split.py                   # Script for Meta-feature based partitioning technique, representative of Concept Shifts
 │   ├── mfs_split.py                      # Script for Meta-feature based partitioning technique, representative of Concept Shifts
 │   ├── modified_mfs_split.py             # A modified version of mfs_split.py to suit the need of this project
 │   ├── marginal_distribution_split.py    # Script for Distribution based partitioning techniques, i.e. Covariate shift and Prior shift
 │   ├── geometric_split.py                # Script for Geometry based partitioning techniques, i.e. Hyperballs and Slabs
 │   └── PartitionProcedure.ipynb          # Notebook to split the datasets using the above approaches
+│
+│
+├── models/
+│   ├── Results/                          # Main results (baseline experiment)
+│   ├── Results_add/                      # Extra results (side experiment)
+│   ├── EvaluationToolbox.py              # Script to score models' performance, sketch Partial Dependence Plots, and hyparameters tunning engine
+│   ├── Experiment.py                     # Script for csv/tsv -> parquet conversion, evaluate models across datasets and split regimes, statistical analysis tools
+│   ├── Experiments.ipynb                 # Notebook to evaluate models to record results
+│   ├── HypoTest.ipynb                    # Notebook to perform hypotheses tests, e.g. best model, performance table, etc...
+│   ├── Models.py                         # Script to add models being evaluated
+│   ├── ModelsBenchmark.ipynb             # Notebook to verify models before officially launching experiment using all datasets.
+│   └── ft_transformer.py                 # Script for FT-Transformer, adapted from external sources
+│
 │
 ├── LICENSE                               # MIT LICENSE
 ├── README.md                             # Project overview and instructions
@@ -67,52 +81,29 @@ On Windows:
 
 ---
 
-## 🧪 Usage Examples
+## 🧪 Data uploading and Partitioning
 
-**NOTES (delete later)** Adjust imports and paths to match your actual code structure. 
+### Upload csv/tsv files to raw/ folder
 
 ### Load data and compute basic statistics
-
-    from stat_sum_func import DatasetStatistics  # update path if different
-
-    path = "data/raw/california/california.parquet"
-    stats = DatasetStatistics(path)
-
-    # Access underlying dataframe
-    df = stats.df
-    print(df.head())
-
-    # Plot distribution of a single feature
-    stats.plot_distribution("Longitude")
+    data/Data_Statistics_Summary.ipynb
 
 ### Run partition algorithms
 
+    parition_algs/PartitionProcedure.ipynb
+
 Due to GitHub resources constraints, the splitted data are not pushed to this repo. Hence, practitioners must re-run the `PartitionProcedure.ipynb` to obtain the splitted data. However, the statistics summary of the splitted data is provided to compare.
 
-**NOTES (delete later)** Explain how to use the code in `partition_algs/`. For example:
+### Load splitted data and compute basic statistics
 
-    # Example placeholder – replace with real usage
-    from partition_algs.some_module import create_partitions
-
-    splits = create_partitions(df, target_column="median_house_value")
-    train_id, test_ood = splits["train_id"], splits["test_ood"]
-
+    data/Splitted_Data_Statistics_Summary.ipynb
 ---
 
 ## 📈 Experiments & Notebooks
 
-**A TEMPLATE FOR THIS SECTION**
-
-Use this section to list key notebooks and what they do, for example:
-
-- `01_eda_california.ipynb` – basic EDA and visualisation  
-- `02_partition_comparison.ipynb` – compare different OOD splitting strategies  
-- `03_model_baselines.ipynb` – baseline models and metrics under OOD settings  
-
-For each notebook, briefly describe:
-- Input data
-- Main goals
-- Key outputs (plots, metrics, tables)
+1. Models Verification before experiment -> use `models/ModelsBenchmark.ipynb`
+2. Main and Side experiment -> use `models/Experiment.ipynb`
+3. Analysis -> use `models/HypoTest.ipynb`
 
 ---
 
