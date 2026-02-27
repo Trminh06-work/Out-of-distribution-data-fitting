@@ -1,0 +1,251 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{gulrajani2020searchlostdomaingeneralization}{misc}{}{}
+      \name{author}{2}{}{%
+        {{hash=94f7047ed067ed3ca0ce018501dd9db9}{%
+           family={Gulrajani},
+           familyi={G\bibinitperiod},
+           given={Ishaan},
+           giveni={I\bibinitperiod}}}%
+        {{hash=47d681c0cbae75196012a538c46ccc06}{%
+           family={Lopez-Paz},
+           familyi={L\bibinithyphendelim P\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{d5c898b9d0f43495b808e7501aa2d4d4}
+      \strng{fullhash}{d5c898b9d0f43495b808e7501aa2d4d4}
+      \strng{fullhashraw}{d5c898b9d0f43495b808e7501aa2d4d4}
+      \strng{bibnamehash}{d5c898b9d0f43495b808e7501aa2d4d4}
+      \strng{authorbibnamehash}{d5c898b9d0f43495b808e7501aa2d4d4}
+      \strng{authornamehash}{d5c898b9d0f43495b808e7501aa2d4d4}
+      \strng{authorfullhash}{d5c898b9d0f43495b808e7501aa2d4d4}
+      \strng{authorfullhashraw}{d5c898b9d0f43495b808e7501aa2d4d4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.LG}
+      \field{eprinttype}{arXiv}
+      \field{title}{In Search of Lost Domain Generalization}
+      \field{year}{2020}
+      \verb{eprint}
+      \verb 2007.01434
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2007.01434
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2007.01434
+      \endverb
+    \endentry
+    \entry{tamang2025handlingoutofdistributiondatasurvey}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=1f7a30983e3f320fedc3b3563db0618a}{%
+           family={Tamang},
+           familyi={T\bibinitperiod},
+           given={Lakpa},
+           giveni={L\bibinitperiod}}}%
+        {{hash=db9cb0b2d5c3d7361a0af815f51539aa}{%
+           family={Bouadjenek},
+           familyi={B\bibinitperiod},
+           given={Mohamed\bibnamedelima Reda},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=ad43b8622a5ea214d2f8e564677618a5}{%
+           family={Dazeley},
+           familyi={D\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+        {{hash=9e1a5eec5828986aa95209f003508e07}{%
+           family={Aryal},
+           familyi={A\bibinitperiod},
+           given={Sunil},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{92f42aa45eb2f954ed93da6994823084}
+      \strng{fullhash}{243188e57fa9077202880ede8fad970b}
+      \strng{fullhashraw}{243188e57fa9077202880ede8fad970b}
+      \strng{bibnamehash}{243188e57fa9077202880ede8fad970b}
+      \strng{authorbibnamehash}{243188e57fa9077202880ede8fad970b}
+      \strng{authornamehash}{92f42aa45eb2f954ed93da6994823084}
+      \strng{authorfullhash}{243188e57fa9077202880ede8fad970b}
+      \strng{authorfullhashraw}{243188e57fa9077202880ede8fad970b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.LG}
+      \field{eprinttype}{arXiv}
+      \field{title}{Handling Out-of-Distribution Data: A Survey}
+      \field{year}{2025}
+      \verb{eprint}
+      \verb 2507.21160
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2507.21160
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2507.21160
+      \endverb
+    \endentry
+    \entry{MORENOTORRES2012521}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=be47e354138576d93c8383a4d419a8ca}{%
+           family={Moreno-Torres},
+           familyi={M\bibinithyphendelim T\bibinitperiod},
+           given={Jose\bibnamedelima G.},
+           giveni={J\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=b4a0cc4253ca36443978ca0ffd27169f}{%
+           family={Raeder},
+           familyi={R\bibinitperiod},
+           given={Troy},
+           giveni={T\bibinitperiod}}}%
+        {{hash=cfcd6e0566804b930e855f55ba1b80f9}{%
+           family={Alaiz-Rodríguez},
+           familyi={A\bibinithyphendelim R\bibinitperiod},
+           given={Rocío},
+           giveni={R\bibinitperiod}}}%
+        {{hash=07f6b2699d3cab07b3a5b04353899cba}{%
+           family={Chawla},
+           familyi={C\bibinitperiod},
+           given={Nitesh\bibnamedelima V.},
+           giveni={N\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=9f81f46436ba77791311a5db20ff5c25}{%
+           family={Herrera},
+           familyi={H\bibinitperiod},
+           given={Francisco},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{4ba298a5ec7be6b142d82879cee0d1de}
+      \strng{fullhash}{cde06fb6190b915cdd53cf13326586b7}
+      \strng{fullhashraw}{cde06fb6190b915cdd53cf13326586b7}
+      \strng{bibnamehash}{cde06fb6190b915cdd53cf13326586b7}
+      \strng{authorbibnamehash}{cde06fb6190b915cdd53cf13326586b7}
+      \strng{authornamehash}{4ba298a5ec7be6b142d82879cee0d1de}
+      \strng{authorfullhash}{cde06fb6190b915cdd53cf13326586b7}
+      \strng{authorfullhashraw}{cde06fb6190b915cdd53cf13326586b7}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0031-3203}
+      \field{journaltitle}{Pattern Recognition}
+      \field{number}{1}
+      \field{title}{A unifying view on dataset shift in classification}
+      \field{volume}{45}
+      \field{year}{2012}
+      \field{pages}{521\bibrangedash 530}
+      \range{pages}{10}
+      \verb{doi}
+      \verb https://doi.org/10.1016/j.patcog.2011.06.019
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S0031320311002901
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S0031320311002901
+      \endverb
+      \keyw{Dataset shift,Data fracture,Changing environments,Differing training and test populations,Covariate shift,Sample selection bias,Non-stationary distributions}
+    \endentry
+    \entry{balestriero2021learninghighdimensionamounts}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=a75b6ce02c54a20ff2c3f73f049815e2}{%
+           family={Balestriero},
+           familyi={B\bibinitperiod},
+           given={Randall},
+           giveni={R\bibinitperiod}}}%
+        {{hash=cee81982c34e06acd308bda8b9ed9332}{%
+           family={Pesenti},
+           familyi={P\bibinitperiod},
+           given={Jerome},
+           giveni={J\bibinitperiod}}}%
+        {{hash=6a1aa6b7eab12b931ca7c7e3f927231d}{%
+           family={LeCun},
+           familyi={L\bibinitperiod},
+           given={Yann},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{c188d10549b0f254b4a89e173cfae7d8}
+      \strng{fullhash}{a1572522e3a245b5a757eab800bf7807}
+      \strng{fullhashraw}{a1572522e3a245b5a757eab800bf7807}
+      \strng{bibnamehash}{a1572522e3a245b5a757eab800bf7807}
+      \strng{authorbibnamehash}{a1572522e3a245b5a757eab800bf7807}
+      \strng{authornamehash}{c188d10549b0f254b4a89e173cfae7d8}
+      \strng{authorfullhash}{a1572522e3a245b5a757eab800bf7807}
+      \strng{authorfullhashraw}{a1572522e3a245b5a757eab800bf7807}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.LG}
+      \field{eprinttype}{arXiv}
+      \field{title}{Learning in High Dimension Always Amounts to Extrapolation}
+      \field{year}{2021}
+      \verb{eprint}
+      \verb 2110.09485
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2110.09485
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2110.09485
+      \endverb
+    \endentry
+    \entry{boyd2004convex}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=ec94d94cc487dd71939a90cbeaaf47d0}{%
+           family={Boyd},
+           familyi={B\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+        {{hash=2608d599a0bc2a784c301329a8da5f7b}{%
+           family={Vandenberghe},
+           familyi={V\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{436abed3bce8d1b1d30640d4e5ff3d58}
+      \strng{fullhash}{436abed3bce8d1b1d30640d4e5ff3d58}
+      \strng{fullhashraw}{436abed3bce8d1b1d30640d4e5ff3d58}
+      \strng{bibnamehash}{436abed3bce8d1b1d30640d4e5ff3d58}
+      \strng{authorbibnamehash}{436abed3bce8d1b1d30640d4e5ff3d58}
+      \strng{authornamehash}{436abed3bce8d1b1d30640d4e5ff3d58}
+      \strng{authorfullhash}{436abed3bce8d1b1d30640d4e5ff3d58}
+      \strng{authorfullhashraw}{436abed3bce8d1b1d30640d4e5ff3d58}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9780521833783}
+      \field{title}{Convex Optimization}
+      \field{year}{2004}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

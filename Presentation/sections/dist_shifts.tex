@@ -1,0 +1,25 @@
+\begin{frame}{Distributional shifts}
+    Call $\mathbf X$ a finite set of data points and $\mathbf y$ is the corresponding set of outputs.
+    $\mathbf P^{\text{tr}}$ is the distribution of train data sampled from $\mathbf X$, and $\mathbf P^{\text{te}}$ is the distribution of test data sampled from $\mathbf X$.
+    \medskip
+
+    \textbf{Definition 3. No shifts - In–Distribution (ID)} \cite{tamang2025handlingoutofdistributiondatasurvey} \label{def3} \\
+    \begin{itemize}
+    \item $\mathbf P^{\text{te}}(\mathbf X) = \mathbf P^{\text{tr}}(\mathbf X)$
+    \item $\mathbf P^{\text{te}}(\mathbf y \mid \mathbf X) = \mathbf P^{\text{tr}}(\mathbf y \mid \mathbf X)$
+    \end{itemize}
+    \medskip
+
+    \textbf{Definition 4. Covariate shifts} \cite{MORENOTORRES2012521} \label{def4} \medskip
+    \begin{itemize}
+    \item $\mathbf P^{\text{te}}(\mathbf X) \neq \mathbf P^{\text{tr}}(\mathbf X)$
+    \item $\mathbf P^{\text{te}}(\mathbf y \mid \mathbf X) = \mathbf P^{\text{tr}}(\mathbf y \mid \mathbf X)$
+    \end{itemize}
+    \medskip
+
+    \textbf{Definition 5. Concept/Semantic shifts} \cite{MORENOTORRES2012521} \label{def5} \medskip
+    \begin{itemize}
+    \item $\mathbf P^{\text{te}}(\mathbf X) = \mathbf P^{\text{tr}}(\mathbf X)$
+    \item $\mathbf P^{\text{te}}(\mathbf y \mid \mathbf X) \neq \mathbf P^{\text{tr}}(\mathbf y \mid \mathbf X)$
+    \end{itemize}
+\end{frame}
