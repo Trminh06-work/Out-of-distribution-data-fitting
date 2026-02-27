@@ -195,13 +195,38 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
 
             # Save files using the idx
-            # path = os.path.join(output_dir, f"train_{idx}.parquet")
-            # df_train.to_parquet(path, index = False)
-            # path = os.path.join(output_dir, f"test_{idx}.parquet")
-            # df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+
+
+    def reverse_single_hyperball(self):
+        """
+            Select the trainng points based on a random Hyperball and predefined TRAIN_SIZE
+        """
+
+        # Create directory if not exist
+        output_dir = f"../data/splitted/{self.file_name}/Single_Hyperball"
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        
+        for idx, SEED in enumerate(self.SEEDS):
+            np.random.seed(SEED)
+            
+            center = self.X.iloc[np.random.randint(0, len(self.X))]
+            inclusive_data = self._ball_selection(center, self.train_size)
+            
+            index_list = inclusive_data.index.to_list()
+            X_train = self.X.iloc[index_list]
+            y_train = self.y.iloc[index_list]
+            X_test = self.X.drop(index_list)
+            y_test = self.y.drop(index_list)
+
+            df_train = pd.concat([X_train, y_train], axis = 1)
+            df_test = pd.concat([X_test, y_test], axis = 1)
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
-            # Delete for the correct version of the experiment
             path = os.path.join(output_dir, f"train_{idx}.parquet")
             df_test.to_parquet(path, index = False)
             path = os.path.join(output_dir, f"test_{idx}.parquet")
@@ -259,13 +284,56 @@ class GeometricSplit:
             df_test = pd.concat([X_test, y_test], axis = 1)
 
             # Save files using the idx
-            # path = os.path.join(output_dir, f"train_{idx}.parquet")
-            # df_train.to_parquet(path, index = False)
-            # path = os.path.join(output_dir, f"test_{idx}.parquet")
-            # df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+
+
+    def reverse_multiple_hyperballs(self, num_balls):
+        # Create directory if not exist
+        output_dir = f"../data/splitted/{self.file_name}/Multiple_Hyperballs"
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        for idx, SEED in enumerate(self.SEEDS):
+            # Avoid accidental modification to the original dataset
+            X = self.X.copy(deep = True)
+            y = self.y.copy(deep = True)
+
+            total = X.shape[0]
+
+            inclusive_data = set()
+
+            np.random.seed(SEED)
+            sub_test_sizes = self._random_sums(self.test_size, num_balls)
+
+            for sub_test_size in sub_test_sizes:
+                np.random.seed(SEED)
+
+                center = X.sample(n = 1, random_state = SEED).to_numpy().squeeze()
+
+                sub_inclusive_data = self._ball_selection(center, sub_test_size)
+                sub_inclusive_data = sub_inclusive_data.index.to_list()
+                sub_inclusive_data = set(sub_inclusive_data)
+
+                # the Hyperballs possibly intersect each other, this lead to fewer data points than expected.
+                # To address this, we omit the selected data points to guarantee the number of data obtained by each ball.
+                sub_inclusive_data = sub_inclusive_data - inclusive_data
+                X = X.drop(sub_inclusive_data)
+
+                inclusive_data = self._union(inclusive_data, sub_inclusive_data)
+
+            index_list = list(inclusive_data)
+            X_test = self.X.iloc[index_list]
+            y_test = self.y.iloc[index_list]
+            X_train = self.X.drop(index_list)
+            y_train = y.drop(index_list)
+
+            df_train = pd.concat([X_train, y_train], axis = 1)
+            df_test = pd.concat([X_test, y_test], axis = 1)
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
-            # Delete for the correct version of the experiment
             path = os.path.join(output_dir, f"train_{idx}.parquet")
             df_test.to_parquet(path, index = False)
             path = os.path.join(output_dir, f"test_{idx}.parquet")
@@ -315,6 +383,44 @@ class GeometricSplit:
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
             # Delete for the correct version of the experiment
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
+
+
+    def reverse_single_slab(self):
+        # Create directory if not exist
+        output_dir = f"../data/splitted/{self.file_name}/Single_Slab"
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        for idx, SEED in enumerate(self.SEEDS):
+            normal_vec, b, point = self._construct_hyperplane(SEED)
+
+            # binary search
+            lo = 0
+            epsilon = 0.01
+            high = np.max(np.linalg.norm(self.X - point, axis = 1))
+
+            while lo < high:
+                delta = lo + (high - lo) / 2
+                inclusive_data = self._data_within_slab(normal_vec, b, delta)
+                if len(inclusive_data) / self.X.shape[0] < self.train_size:
+                  lo = delta + epsilon
+                else:
+                  high = delta - epsilon
+
+            X_train = self._data_within_slab(normal_vec, b, delta)
+            y_train = self.y.iloc[X_train.index]
+
+            X_test = self.X.drop(X_train.index)
+            y_test = self.y.drop(X_train.index)
+
+            df_train = pd.concat([X_train, y_train], axis = 1)
+            df_test = pd.concat([X_test, y_test], axis = 1)
+
+            # This is to compare different ways of choosing train and test sets (Additional experiment)
             path = os.path.join(output_dir, f"train_{idx}.parquet")
             df_test.to_parquet(path, index = False)
             path = os.path.join(output_dir, f"test_{idx}.parquet")
@@ -371,6 +477,51 @@ class GeometricSplit:
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
             # Delete for the correct version of the experiment
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
+
+    
+    def reverse_semi_infinite_slab(self):
+        # Create directory if not exist
+        output_dir = f"../data/splitted/{self.file_name}/Semi_Infinite_Slab"
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        for idx, SEED in enumerate(self.SEEDS):
+            np.random.seed(SEED)
+            normal_vec, lo, high = self._find_bounds(SEED)
+            epsilon = 0.01
+            cur_proportion = 0
+
+            # According to the lower and upperbounds, this function leverages "binary search" to find a point which lies in the hyperplane that
+            # can split the dataset into two sets that satisfies the given size requirements. The termination condition is when the testing set's size
+            # belongs to [test_size, test_size + epsilon].
+            while cur_proportion < self.test_size or cur_proportion > self.test_size + epsilon:
+                point = lo + (high - lo) / 2
+
+                b = np.dot(normal_vec, point)
+                X_test = self._data_one_side(normal_vec, b)
+
+                cur_proportion = self._compute_proportion(X_test)
+                if cur_proportion < self.test_size:
+                  lo = point + epsilon
+                else:
+                  high = point - epsilon
+
+                if cur_proportion == self._compute_proportion(X_test):
+                    break
+                cur_proportion = self._compute_proportion(X_test)
+
+            y_test = self.y.iloc[X_test.index]
+            X_train = self.X.drop(X_test.index)
+            y_train = self.y.iloc[X_train.index]
+
+            df_train = pd.concat([X_train, y_train], axis = 1)
+            df_test = pd.concat([X_test, y_test], axis = 1)
+
+            # This is to compare different ways of choosing train and test sets (Additional experiment)
             path = os.path.join(output_dir, f"train_{idx}.parquet")
             df_test.to_parquet(path, index = False)
             path = os.path.join(output_dir, f"test_{idx}.parquet")
@@ -433,6 +584,54 @@ class GeometricSplit:
 
             # This is to compare different ways of choosing train and test sets (Additional experiment)
             # Delete for the correct version of the experiment
+            path = os.path.join(output_dir, f"train_{idx}.parquet")
+            df_test.to_parquet(path, index = False)
+            path = os.path.join(output_dir, f"test_{idx}.parquet")
+            df_train.to_parquet(path, index = False)
+    
+
+    def reverse_kmeans_hyperballs(self, n_clusters):
+
+        # Create directory if not exist
+        output_dir = f"../data/splitted/{self.file_name}/KMeans_Hyperballs"
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        for idx, SEED in enumerate(self.SEEDS):
+            kmeans = KMeans(n_clusters = n_clusters, random_state = SEED)
+            kmeans.fit(self.X)
+
+            centroids = kmeans.cluster_centers_
+            labels = kmeans.labels_
+
+            total = self.X.shape[0]
+            clusters = [i for i in range(n_clusters)]
+
+            inclusive_data = set()
+
+            while len(inclusive_data) / total < self.test_size and len(clusters):
+                np.random.seed(SEED)
+                cl = np.random.choice(clusters)
+                labels_indices = np.where(labels == cl)[0]
+
+                if (len(inclusive_data) + len(labels_indices)) / total < self.test_size:
+                  inclusive_data = self._union(inclusive_data, set(labels_indices))
+                else:
+                  num = int(self.test_size * total - len(inclusive_data))
+                  inclusive_data = self._union(inclusive_data, set(labels_indices[:num]))
+
+                clusters.remove(cl)
+
+            inclusive_data = list(inclusive_data)
+            X_train = self.X.drop(inclusive_data)
+            y_train = self.y.drop(inclusive_data)
+            X_test = self.X.iloc[inclusive_data]
+            y_test = self.y.iloc[inclusive_data]
+
+            df_train = pd.concat([X_train, y_train], axis = 1)
+            df_test = pd.concat([X_test, y_test], axis = 1)
+
+            # This is to compare different ways of choosing train and test sets (Additional experiment)
             path = os.path.join(output_dir, f"train_{idx}.parquet")
             df_test.to_parquet(path, index = False)
             path = os.path.join(output_dir, f"test_{idx}.parquet")
